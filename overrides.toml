@@ -8,6 +8,19 @@
 "MADKONTO" = "Groceries"
 # The MasterCard is only used for vacations; paying it off counts as vacation.
 "MASTERCARD" = "Vacation"
+"Til Adelina Popas ops." = "Children"
+"SceneKunst" = "Children"
+"Kab" = "Housing"
+"Milkman" = "Groceries"
+"RISTERIET" = "Groceries"
+"Punktum DK" = "Subscriptions"
+"H.P. CHR. & BERG" = "Housing"
+"HOTOTOOLS" = "Housing"
+"Reeform" = "Leisure"
+"Til Jakob" = "Shopping & clothes"
+"Til Aurelia" = "Shopping & clothes"
+"Ida Ingeniørfore" = "Miscellaneous"
 
 # Or pin a single transaction by fingerprint (prefix shown in the report, min. 8 chars).
 [transactions]
+"b1ec34b2d0e4" = "Children"
