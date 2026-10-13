@@ -1,0 +1,11 @@
+# Overrides always win over Claude and are re-applied on every run.
+
+# Match by description substring (case-insensitive) -> category.
+# The first matching rule wins.
+[rules]
+"NETTO" = "Groceries"
+"MOBILEPAY ANNA" = "Transfers"
+
+# Or pin a single transaction by fingerprint (prefix shown in the report, min. 8 chars).
+[transactions]
+# "a3f9c1d2e4b5" = "Vacation"

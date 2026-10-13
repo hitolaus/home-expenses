@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T22:30:50+02:00",
+  "title": "Design System: Household budget",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Planner Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(25% 0.000 89.9)",
+          "oklch(35% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(60% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Planner Ink",
+        "canonical": "#1b1b19",
+        "tonalRamp": [
+          "oklch(15% 0.004 106.7)",
+          "oklch(25% 0.004 106.7)",
+          "oklch(35% 0.004 106.7)",
+          "oklch(48% 0.004 106.7)",
+          "oklch(60% 0.004 106.7)",
+          "oklch(72% 0.004 106.7)",
+          "oklch(84% 0.004 106.7)",
+          "oklch(95% 0.004 106.7)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Pencil Grey",
+        "canonical": "#67675f",
+        "tonalRamp": [
+          "oklch(15% 0.012 106.8)",
+          "oklch(25% 0.012 106.8)",
+          "oklch(35% 0.012 106.8)",
+          "oklch(48% 0.012 106.8)",
+          "oklch(60% 0.012 106.8)",
+          "oklch(72% 0.012 106.8)",
+          "oklch(84% 0.012 106.8)",
+          "oklch(95% 0.012 106.8)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Ruled Line",
+        "canonical": "#cfcfc7",
+        "tonalRamp": [
+          "oklch(15% 0.011 106.6)",
+          "oklch(25% 0.011 106.6)",
+          "oklch(35% 0.011 106.6)",
+          "oklch(48% 0.011 106.6)",
+          "oklch(60% 0.011 106.6)",
+          "oklch(72% 0.011 106.6)",
+          "oklch(84% 0.011 106.6)",
+          "oklch(95% 0.011 106.6)"
+        ]
+      },
+      "hair": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e9e9e3",
+        "tonalRamp": [
+          "oklch(15% 0.008 106.6)",
+          "oklch(25% 0.008 106.6)",
+          "oklch(35% 0.008 106.6)",
+          "oklch(48% 0.008 106.6)",
+          "oklch(60% 0.008 106.6)",
+          "oklch(72% 0.008 106.6)",
+          "oklch(84% 0.008 106.6)",
+          "oklch(95% 0.008 106.6)"
+        ]
+      },
+      "column": {
+        "role": "neutral",
+        "displayName": "Column Shade",
+        "canonical": "#f6f6f2",
+        "tonalRamp": [
+          "oklch(15% 0.005 106.5)",
+          "oklch(25% 0.005 106.5)",
+          "oklch(35% 0.005 106.5)",
+          "oklch(48% 0.005 106.5)",
+          "oklch(60% 0.005 106.5)",
+          "oklch(72% 0.005 106.5)",
+          "oklch(84% 0.005 106.5)",
+          "oklch(95% 0.005 106.5)"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Marker Green",
+        "canonical": "#2f7a52",
+        "tonalRamp": [
+          "oklch(15% 0.098 157.0)",
+          "oklch(25% 0.098 157.0)",
+          "oklch(35% 0.098 157.0)",
+          "oklch(48% 0.098 157.0)",
+          "oklch(60% 0.098 157.0)",
+          "oklch(72% 0.098 157.0)",
+          "oklch(84% 0.098 157.0)",
+          "oklch(95% 0.098 157.0)"
+        ]
+      },
+      "amber": {
+        "role": "secondary",
+        "displayName": "Marker Amber",
+        "canonical": "#c98a12",
+        "tonalRamp": [
+          "oklch(15% 0.139 75.5)",
+          "oklch(25% 0.139 75.5)",
+          "oklch(35% 0.139 75.5)",
+          "oklch(48% 0.139 75.5)",
+          "oklch(60% 0.139 75.5)",
+          "oklch(72% 0.139 75.5)",
+          "oklch(84% 0.139 75.5)",
+          "oklch(95% 0.139 75.5)"
+        ]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Marker Red",
+        "canonical": "#c8402c",
+        "tonalRamp": [
+          "oklch(15% 0.176 31.3)",
+          "oklch(25% 0.176 31.3)",
+          "oklch(35% 0.176 31.3)",
+          "oklch(48% 0.176 31.3)",
+          "oklch(60% 0.176 31.3)",
+          "oklch(72% 0.176 31.3)",
+          "oklch(84% 0.176 31.3)",
+          "oklch(95% 0.176 31.3)"
+        ]
+      },
+      "green-tint": {
+        "role": "tertiary",
+        "displayName": "Green Wash",
+        "canonical": "#d3e7da",
+        "tonalRamp": [
+          "oklch(15% 0.028 157.3)",
+          "oklch(25% 0.028 157.3)",
+          "oklch(35% 0.028 157.3)",
+          "oklch(48% 0.028 157.3)",
+          "oklch(60% 0.028 157.3)",
+          "oklch(72% 0.028 157.3)",
+          "oklch(84% 0.028 157.3)",
+          "oklch(95% 0.028 157.3)"
+        ]
+      },
+      "amber-tint": {
+        "role": "tertiary",
+        "displayName": "Amber Wash",
+        "canonical": "#f5e2b8",
+        "tonalRamp": [
+          "oklch(15% 0.059 86.5)",
+          "oklch(25% 0.059 86.5)",
+          "oklch(35% 0.059 86.5)",
+          "oklch(48% 0.059 86.5)",
+          "oklch(60% 0.059 86.5)",
+          "oklch(72% 0.059 86.5)",
+          "oklch(84% 0.059 86.5)",
+          "oklch(95% 0.059 86.5)"
+        ]
+      },
+      "red-tint": {
+        "role": "tertiary",
+        "displayName": "Red Wash",
+        "canonical": "#f6d3cb",
+        "tonalRamp": [
+          "oklch(15% 0.041 33.0)",
+          "oklch(25% 0.041 33.0)",
+          "oklch(35% 0.041 33.0)",
+          "oklch(48% 0.041 33.0)",
+          "oklch(60% 0.041 33.0)",
+          "oklch(72% 0.041 33.0)",
+          "oklch(84% 0.041 33.0)",
+          "oklch(95% 0.041 33.0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Verdict",
+        "purpose": "The verdict sentence only, once per report."
+      },
+      "headline": {
+        "displayName": "Masthead",
+        "purpose": "Masthead title, uppercase."
+      },
+      "title": {
+        "displayName": "Section Heading",
+        "purpose": "Section headings in caps on a 1.5px ink rule."
+      },
+      "figure": {
+        "displayName": "Headline Figure",
+        "purpose": "Spent, budget and gap values in and under the pace chart."
+      },
+      "label": {
+        "displayName": "Planner Label",
+        "purpose": "Month heads, TODAY, chart end labels; axis values at 500 weight in Pencil Grey."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Verdict explanation, max 62ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Ledes, rows, summaries; tabular figures."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Column heads, sub-figures, keys, footer, month-cell amounts."
+      },
+      "mono": {
+        "displayName": "Fingerprint",
+        "purpose": "Transaction fingerprints, select-all."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Pace stroke draw-in (1.4s, 0.15s delay) and disclosure chevron rotation (0.2s)."
+      },
+      {
+        "name": "dot-appear",
+        "value": "opacity 0.3s ease-out 1.3s",
+        "purpose": "Pace end dot appears after the stroke lands."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: no-preference",
+        "purpose": "All animation is gated behind this query."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Verdict",
+      "kind": "custom",
+      "refersTo": "verdict-mark-over",
+      "description": "The one-answer verdict sentence with a highlighter stroke on the key words; red wash when over, green wash when within.",
+      "html": "<div class=\"ds-verdict\"><h2><span class=\"ds-mark\">Over budget</span> by 146.439 DKK</h2><p>894.439 DKK spent against a budget of 748.000 DKK over these twelve months (120%).</p></div>",
+      "css": ".ds-verdict { color: var(--ink, #1b1b19); font-variant-numeric: tabular-nums; } .ds-verdict h2 { font: 700 64px/.95 var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: -.01em; margin: 0; text-wrap: balance; } .ds-verdict .ds-mark { padding: 0 .08em; margin: 0 -.04em; border-radius: 3px; background: linear-gradient(transparent 52%, var(--red-tint, #f6d3cb) 52%, var(--red-tint, #f6d3cb) 92%, transparent 92%); } .ds-verdict p { font: 19px/1.45 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); max-width: 62ch; margin: 18px 0 0; }"
+    },
+    {
+      "name": "Section Heading",
+      "kind": "custom",
+      "refersTo": "section-heading",
+      "description": "Condensed caps section title on a 1.5px ink rule, followed by a grey lede.",
+      "html": "<div class=\"ds-section\"><h2>Where the money went</h2><p>Categories ranked by what they cost over the twelve months, all on the same scale.</p></div>",
+      "css": ".ds-section h2 { font: 700 15px/1 var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: .12em; text-transform: uppercase; color: var(--ink, #1b1b19); margin: 0 0 6px; padding-bottom: 9px; border-bottom: 1.5px solid var(--ink, #1b1b19); } .ds-section p { font: 15px/1.5 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); color: var(--muted, #67675f); margin: 12px 0 0; max-width: 75ch; }"
+    },
+    {
+      "name": "Notes List",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Ruled notes under the verdict; amber dot for data notes, red dot only for needs-review.",
+      "html": "<ul class=\"ds-notes\"><li>Account data starts after the window start; spending is understated.</li><li class=\"ds-alert\"><span><a href=\"#\">268 transactions need review</a>: uncategorized or a low-confidence category.</span></li></ul>",
+      "css": ".ds-notes { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule, #cfcfc7); font: 15px/1.5 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); color: var(--ink, #1b1b19); } .ds-notes li { padding: 9px 0; border-bottom: 1px solid var(--rule, #cfcfc7); display: flex; gap: 12px; align-items: baseline; } .ds-notes li::before { content: \"\"; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--amber, #c98a12); transform: translateY(-1px); } .ds-notes li.ds-alert::before { background: var(--red, #c8402c); } .ds-notes a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; } .ds-notes a:focus-visible { outline: 2px solid var(--ink, #1b1b19); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ranked Bar Row",
+      "kind": "custom",
+      "refersTo": "rank-fill-red",
+      "description": "One category on the shared scale: state fill to the limit, ink limit tick, red hatch for spending beyond the limit.",
+      "html": "<div class=\"ds-rank\"><div class=\"ds-row\"><span class=\"ds-name\">Transport</span><div class=\"ds-track\"><span class=\"ds-fill\" style=\"width:30%;background:var(--red,#c8402c)\"></span><span class=\"ds-over\" style=\"left:30%;width:9%\"></span><span class=\"ds-tick\" style=\"left:30%\"></span></div><span class=\"ds-num\">116.353<small>129% of limit</small></span></div><div class=\"ds-row\"><span class=\"ds-name\">Subscriptions</span><div class=\"ds-track\"><span class=\"ds-fill\" style=\"width:14.5%;background:var(--amber,#c98a12)\"></span><span class=\"ds-tick\" style=\"left:16.7%\"></span></div><span class=\"ds-num\">43.442<small>87% of limit</small></span></div><div class=\"ds-row\"><span class=\"ds-name\">Children</span><div class=\"ds-track\"><span class=\"ds-fill\" style=\"width:3.2%;background:var(--green,#2f7a52)\"></span><span class=\"ds-tick\" style=\"left:10%\"></span></div><span class=\"ds-num\">9.721<small>32% of limit</small></span></div></div>",
+      "css": ".ds-rank { font: 15px/1.5 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); color: var(--ink, #1b1b19); font-variant-numeric: tabular-nums; } .ds-row { display: grid; grid-template-columns: 140px 1fr 110px; gap: 16px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--hair, #e9e9e3); } .ds-name { font-weight: 600; } .ds-num { text-align: right; white-space: nowrap; } .ds-num small { display: block; color: var(--muted, #67675f); font-size: 12.5px; } .ds-track { position: relative; height: 18px; } .ds-track::before { content: \"\"; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dotted var(--rule, #cfcfc7); } .ds-fill { position: absolute; left: 0; top: 2px; bottom: 2px; border-radius: 2px; } .ds-over { position: absolute; top: 2px; bottom: 2px; border-radius: 0 2px 2px 0; background: repeating-linear-gradient(-45deg, var(--red, #c8402c) 0 3px, var(--red-tint, #f6d3cb) 3px 6px); } .ds-tick { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink, #1b1b19); }"
+    },
+    {
+      "name": "Month Grid",
+      "kind": "custom",
+      "refersTo": "planner-cell",
+      "description": "Planner cells filled from the bottom with a marker wash against the month's prorated share; red top edge when over.",
+      "html": "<table class=\"ds-planner\"><thead><tr><th></th><th>Oct 25</th><th>Nov 25</th><th>Dec 25</th></tr></thead><tbody><tr><td>Groceries</td><td><div class=\"ds-cell\"><div class=\"ds-ink ds-green\" style=\"height:8px\"></div><span>2.621</span></div></td><td><div class=\"ds-cell\"><div class=\"ds-ink ds-red\" style=\"height:34px\"></div><span>9.933</span></div></td><td><div class=\"ds-cell\"><div class=\"ds-ink ds-amber\" style=\"height:30px\"></div><span>8.730</span></div></td></tr><tr><td>Children</td><td><div class=\"ds-cell\"><div class=\"ds-ink ds-green\" style=\"height:12px\"></div><span>991</span></div></td><td><div class=\"ds-cell\"></div></td><td><div class=\"ds-cell\"><div class=\"ds-ink ds-green\" style=\"height:2px\"></div><span>50</span></div></td></tr></tbody></table>",
+      "css": ".ds-planner { border-collapse: collapse; width: 100%; table-layout: fixed; font: 12.5px/1.5 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); color: var(--ink, #1b1b19); font-variant-numeric: tabular-nums; } .ds-planner th, .ds-planner td { border-left: 1px solid var(--ink, #1b1b19); padding: 0; } .ds-planner th:first-child, .ds-planner td:first-child { border-left: 0; width: 120px; text-align: left; font-weight: 600; font-size: 14px; } .ds-planner thead th { font: 700 13px/1 var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: .08em; text-transform: uppercase; text-align: center; padding: 8px 0 9px; border-bottom: 1.5px solid var(--ink, #1b1b19); } .ds-planner tbody tr { border-bottom: 1px solid var(--hair, #e9e9e3); } .ds-planner tbody tr:nth-child(odd) td + td { background: var(--column, #f6f6f2); } .ds-cell { position: relative; height: 40px; } .ds-ink { position: absolute; left: 3px; right: 3px; bottom: 3px; border-radius: 2px; } .ds-green { background: var(--green-tint, #d3e7da); } .ds-amber { background: var(--amber-tint, #f5e2b8); } .ds-red { background: var(--red-tint, #f6d3cb); } .ds-red::after { content: \"\"; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--red, #c8402c); border-radius: 2px 2px 0 0; } .ds-cell span { position: relative; display: block; text-align: right; padding: 13px 7px 0 0; }"
+    },
+    {
+      "name": "Pace Chart",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Ruled month columns, dashed accruing budget, stepped marker stroke for cumulative spend, ink today edge, gap bracket at the right.",
+      "html": "<svg class=\"ds-pace\" viewBox=\"0 0 420 180\" role=\"img\" aria-label=\"Cumulative spending against the budget\"><rect class=\"ds-col\" x=\"110\" y=\"30\" width=\"80\" height=\"120\"/><rect class=\"ds-col\" x=\"270\" y=\"30\" width=\"80\" height=\"120\"/><line class=\"ds-grid\" x1=\"30\" x2=\"350\" y1=\"90\" y2=\"90\"/><line class=\"ds-mr\" x1=\"30\" x2=\"30\" y1=\"10\" y2=\"150\"/><line class=\"ds-mr\" x1=\"110\" x2=\"110\" y1=\"10\" y2=\"150\"/><line class=\"ds-mr\" x1=\"190\" x2=\"190\" y1=\"10\" y2=\"150\"/><line class=\"ds-mr\" x1=\"270\" x2=\"270\" y1=\"10\" y2=\"150\"/><text class=\"ds-month\" x=\"70\" y=\"24\" text-anchor=\"middle\">JAN</text><text class=\"ds-month\" x=\"150\" y=\"24\" text-anchor=\"middle\">FEB</text><text class=\"ds-month\" x=\"230\" y=\"24\" text-anchor=\"middle\">MAR</text><text class=\"ds-month\" x=\"310\" y=\"24\" text-anchor=\"middle\">APR</text><line class=\"ds-axis\" x1=\"30\" x2=\"350\" y1=\"150\" y2=\"150\"/><line class=\"ds-budget\" x1=\"30\" y1=\"150\" x2=\"350\" y2=\"70\"/><polyline class=\"ds-spent\" points=\"30,150 80,150 80,136 140,136 140,118 200,118 200,100 260,100 260,80 320,80 320,56 350,56\"/><circle cx=\"350\" cy=\"56\" r=\"5\" fill=\"var(--red,#c8402c)\"/><circle cx=\"350\" cy=\"70\" r=\"4\" fill=\"var(--paper,#fff)\" stroke=\"var(--ink,#1b1b19)\" stroke-width=\"1.5\"/><line class=\"ds-today\" x1=\"350\" x2=\"350\" y1=\"10\" y2=\"156\"/><path d=\"M358,56 H362 V70 H358\" fill=\"none\" stroke=\"var(--red,#c8402c)\" stroke-width=\"1.5\"/><text class=\"ds-gap\" x=\"368\" y=\"60\">OVER</text><text class=\"ds-today-l\" x=\"350\" y=\"170\" text-anchor=\"end\">TODAY</text></svg>",
+      "css": ".ds-pace { display: block; width: 100%; height: auto; background: var(--paper, #ffffff); overflow: visible; } .ds-col { fill: var(--column, #f6f6f2); } .ds-grid { stroke: var(--hair, #e9e9e3); } .ds-mr { stroke: var(--ink, #1b1b19); stroke-width: 1; } .ds-axis { stroke: var(--ink, #1b1b19); stroke-width: 1.5; } .ds-month { font: 500 11px var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: .04em; fill: var(--ink, #1b1b19); } .ds-budget { stroke: var(--ink, #1b1b19); stroke-width: 1.5; stroke-dasharray: 6 5; fill: none; } .ds-spent { fill: none; stroke: var(--red, #c8402c); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; } .ds-today { stroke: var(--ink, #1b1b19); stroke-width: 2.5; } .ds-today-l { font: 700 11px var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: .08em; fill: var(--ink, #1b1b19); } .ds-gap { font: 700 13px var(--display, \"Planner\", \"Barlow Condensed\", \"Arial Narrow\", sans-serif); letter-spacing: .02em; fill: var(--red, #c8402c); } @media (prefers-reduced-motion: no-preference) { .ds-spent { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: ds-draw 1.4s cubic-bezier(.16, 1, .3, 1) .15s forwards; } @keyframes ds-draw { to { stroke-dashoffset: 0; } } }"
+    },
+    {
+      "name": "Disclosure Row",
+      "kind": "custom",
+      "refersTo": "disclosure-row",
+      "description": "Native details/summary category row with drawn chevron; opens to a ruled transaction table with select-all fingerprints.",
+      "html": "<details class=\"ds-disc\" open><summary><span class=\"ds-cat\">Groceries</span><span class=\"ds-count\">412 transactions</span><span class=\"ds-amt\">121.682 DKK</span></summary><table class=\"ds-tx\"><thead><tr><th>Date</th><th>Description</th><th class=\"ds-n\">Amount</th><th>Fingerprint</th></tr></thead><tbody><tr><td class=\"ds-date\">11.10.2026</td><td>Netto</td><td class=\"ds-n\">-312,50</td><td><code>3f9a1c07b2e4</code></td></tr><tr><td class=\"ds-date\">09.10.2026</td><td>Rema 1000</td><td class=\"ds-n\">-188,00</td><td><code>a71d0e55c932</code></td></tr></tbody></table></details>",
+      "css": ".ds-disc { border-bottom: 1px solid var(--hair, #e9e9e3); font: 15px/1.5 var(--text, -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif); color: var(--ink, #1b1b19); font-variant-numeric: tabular-nums; } .ds-disc summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 18px 1fr auto 130px; gap: 12px; align-items: baseline; padding: 11px 0; } .ds-disc summary::-webkit-details-marker { display: none; } .ds-disc summary::before { content: \"\"; width: 7px; height: 7px; border-right: 1.5px solid var(--ink, #1b1b19); border-bottom: 1.5px solid var(--ink, #1b1b19); transform: translateY(-2px) rotate(-45deg); transition: transform .2s cubic-bezier(.16, 1, .3, 1); } .ds-disc[open] > summary::before { transform: translateY(-4px) rotate(45deg); } .ds-disc summary:hover .ds-cat { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; } .ds-disc summary:focus-visible { outline: 2px solid var(--ink, #1b1b19); outline-offset: 3px; } .ds-cat { font-weight: 600; } .ds-count { color: var(--muted, #67675f); font-size: 13.5px; } .ds-amt { text-align: right; } .ds-tx { border-collapse: collapse; margin: 2px 0 18px 30px; width: calc(100% - 30px); font-size: 14px; } .ds-tx th { font-weight: 500; color: var(--muted, #67675f); font-size: 12.5px; text-align: left; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--rule, #cfcfc7); } .ds-tx td { padding: 6px 12px 6px 0; border-bottom: 1px solid var(--hair, #e9e9e3); } .ds-tx tr:last-child td { border-bottom: 0; } .ds-n { text-align: right; white-space: nowrap; } .ds-date { color: var(--muted, #67675f); white-space: nowrap; } .ds-tx code { font: 12.5px/1 ui-monospace, \"SF Mono\", Menlo, monospace; color: var(--muted, #67675f); user-select: all; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Kitchen Wall Year Planner",
+    "overview": "The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets one answer first (a monumental verdict sentence), then the year drawn against the budget, then where the money went by length, then month-by-month detail, then the transactions behind every number.\n\nDensity is high but calm. Figures are tabular everywhere so columns of Danish-formatted amounts align. Colour is almost absent until it means something: three marker colours carry state and nothing else. Headings and chart labels are set in a condensed grotesk in caps, the hand-lettered register of a wall planner; reading text is the system sans.\n\nThe document is one self-contained HTML file: inline CSS, inline SVG drawn server-side, fonts embedded as data URIs, no script, no external URL. Every visual must be achievable under that constraint.",
+    "keyCharacteristics": [
+      "White planner paper, near-black ink, three marker colours mapped to state.",
+      "Ruled structure: 3px ink rules bound the page, 1.5px ink rules open sections and close totals, 1px hairlines separate rows.",
+      "Barlow Condensed (embedded as \"Planner\") in caps for headings, chart labels and headline figures; system sans for prose and tables.",
+      "No cards, no elevation shadows, no containers with fills.",
+      "Charts are planner drawings: a pace chart, ranked bars with a limit tick, a month grid filled like marker ink.",
+      "Self-contained: no script, no network, server-rendered SVG and CSS only."
+    ],
+    "rules": [
+      {
+        "name": "The Red Means Trouble Rule",
+        "body": "Red and its wash are reserved for over-limit and needs-review. Nothing decorative, no headings, no links, no brand accents are red. If a red element on the page does not point at overspending or at a transaction to fix, it is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Markers Rule",
+        "body": "State is green under 75%, amber from 75 to 100%, red over 100%, computed by one function and applied identically to bars, pace stroke and month cells. No fourth state colour, and no state colour used for anything but state.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber Never Writes Rule",
+        "body": "Amber is a fill and stroke colour only; it is too light to carry text on paper. Text that must signal state uses ink on a wash, or red/green.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "`font-variant-numeric: tabular-nums` is set on the body and inherited everywhere. Amounts are right-aligned, Danish-formatted (1.234 / 1.234,50), and never wrap.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lettering Rule",
+        "body": "The condensed face is for planner lettering: short caps labels, headings and headline figures. It never sets a sentence other than the verdict, and never sets table body text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rules Not Boxes Rule",
+        "body": "Group things with ruled lines and columns. If a new element needs a border on all four sides, a fill behind a block, or a shadow to read as a group, it is outside this world.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** map state through the one threshold function: green under 75%, amber 75 to 100%, red over 100%.",
+      "**Do** keep red for over-limit and needs-review only.",
+      "**Do** put ink text on a wash, never on a full-strength marker colour.",
+      "**Do** separate and group with rules: 3px ink for page bounds, 1.5px ink for section heads and totals, 1px hairlines for rows.",
+      "**Do** set headings, month names and chart labels in the embedded condensed face in caps, and prose and tables in the system sans with tabular figures.",
+      "**Do** draw charts as server-rendered inline SVG or CSS from computed figures, with a text equivalent (SVG `desc`, ARIA labels, the mobile figure row).",
+      "**Do** put compared quantities on one shared scale and mark the limit as an ink tick.",
+      "**Do** let wide grids scroll horizontally below 760px instead of shrinking them, and swap chart labels for a figure row when the chart gets too small to label.",
+      "**Do** gate motion behind `prefers-reduced-motion: no-preference`."
+    ],
+    "donts": [
+      "**Don't** use cards, filled panels or elevation shadows.",
+      "**Don't** use red, or its wash, for anything that is not overspending or a transaction needing review.",
+      "**Don't** set text in amber.",
+      "**Don't** add script, external URLs, remote fonts or linked images; the report is one self-contained file.",
+      "**Don't** use KPI tiles or donut charts; length on a shared scale answers \"where did the money go\".",
+      "**Don't** show invented or sample figures; every number is computed from the data."
+    ]
+  }
+}

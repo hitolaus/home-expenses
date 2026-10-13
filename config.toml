@@ -1,0 +1,72 @@
+currency = "DKK"
+window_months = 12            # rolling window for the report
+reference_date = "today"      # or a fixed date, e.g. "2026-09-30"
+model = "claude-opus-5-5"
+statements_dir = "./statements"
+database = "./data/budget.db"
+output = "./output/report.html"
+
+[[category]]
+name = "Groceries"
+description = "Supermarkets, bakeries, groceries"
+yearly_limit = 120000
+
+[[category]]
+name = "Housing"
+description = "Rent, mortgage, utilities, home insurance, repairs"
+yearly_limit = 300000
+
+[[category]]
+name = "Transport"
+description = "Public transport, fuel, EV charging, parking, car loan and car costs, bikes"
+yearly_limit = 90000
+
+[[category]]
+name = "Restaurants & takeaway"
+description = "Restaurants, cafés, bars, food delivery (Wolt, Just Eat)"
+yearly_limit = 12000
+
+[[category]]
+name = "Shopping & clothes"
+description = "Clothes, department stores, electronics, home goods, gifts"
+yearly_limit = 36000
+
+[[category]]
+name = "Subscriptions"
+description = "Streaming, phone, internet, software and app subscriptions, memberships"
+yearly_limit = 50000
+
+[[category]]
+name = "Leisure"
+description = "Sport, hobbies, entertainment, cinema, concerts, day trips and experiences at home (not vacations)"
+yearly_limit = 30000
+
+[[category]]
+name = "Vacation"
+description = "Everything for vacations: flights, hotels, holiday homes, rental cars, travel agencies, and purchases made abroad while travelling"
+yearly_limit = 50000
+
+[[category]]
+name = "Health"
+description = "Pharmacy, doctor, dentist, health insurance, medicine"
+yearly_limit = 15000
+
+[[category]]
+name = "Children"
+description = "Childcare, toys, children's clothes and activities, savings for children"
+yearly_limit = 30000
+
+[[category]]
+name = "Miscellaneous"
+description = "Anything that does not fit another category, bank fees"
+yearly_limit = 15000
+
+[[category]]
+name = "Income"
+description = "Salary, refunds from public authorities, other income"
+budgeted = false              # excluded from budget totals
+
+[[category]]
+name = "Transfers"
+description = "Transfers between our own accounts and between the two of us"
+budgeted = false
