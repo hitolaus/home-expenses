@@ -145,6 +145,7 @@ class RankedLine:
     name: str
     spent: Decimal
     limit: Decimal | None
+    month_limit: Decimal | None  # the yearly limit spread over twelve months
     used_pct: float | None
     bar_pct: float    # used % of limit, as % of the track
     limit_pct: float  # the limit's position on the track, the same for every category
@@ -159,6 +160,7 @@ def ranked_lines(budget: Budget) -> list[RankedLine]:
         used = max(ln.used_pct or 0.0, 0.0)
         out.append(RankedLine(
             name=ln.name, spent=ln.spent, limit=ln.limit, used_pct=ln.used_pct,
+            month_limit=None if ln.limit is None else ln.limit / 12,
             bar_pct=min(used, RANK_SCALE) / RANK_SCALE * 100,
             limit_pct=100 / RANK_SCALE * 100,
             capped=used > RANK_SCALE,
@@ -218,7 +220,6 @@ def render(budget: Budget, config: Config, last_import: str | None) -> str:
         ranked=ranked_lines(budget),
         rank_scale=RANK_SCALE,
         grid=month_grid(budget),
-        over_count=sum(1 for ln in budget.lines if ln.used_pct is not None and ln.used_pct > 100),
         fonts={w: font_data_uri(w) for w in (500, 700)},
     )
 

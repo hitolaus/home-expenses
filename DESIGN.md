@@ -85,16 +85,6 @@ components:
     textColor: "{colors.ink}"
     typography: "{typography.title}"
     padding: "0 0 9px"
-  verdict-mark-over:
-    backgroundColor: "{colors.red-tint}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.mark}"
-  verdict-mark-under:
-    backgroundColor: "{colors.green-tint}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.mark}"
   rank-fill-green:
     backgroundColor: "{colors.green}"
     rounded: "{rounded.fill}"
@@ -138,7 +128,7 @@ components:
 
 **Creative North Star: "The Kitchen Wall Year Planner"**
 
-The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets one answer first (a monumental verdict sentence), then the year drawn against the budget, then each category against its own limit, then month-by-month detail, then the transactions behind every number.
+The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets the most important answer first: each category against its own limit, with its monthly budget. Then the year drawn against the budget, then month-by-month detail, then the transactions behind every number. There is no verdict headline; the ranked list's total row carries the overall figure.
 
 Density is high but calm. Figures are tabular everywhere so columns of Danish-formatted amounts align. Colour is almost absent until it means something: three marker colours carry state and nothing else. Headings and chart labels are set in a condensed grotesk in caps, the hand-lettered register of a wall planner; reading text is the system sans.
 
@@ -165,7 +155,7 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 - **Marker Red** (`red`): over a limit, and needs review. Bar fills, the overspend hatch, the "over" amounts, the needs-review dot and low-confidence values, the top edge of an over-share month cell.
 
 ### Tertiary (marker tints)
-- **Green Wash** (`green-tint`), **Amber Wash** (`amber-tint`), **Red Wash** (`red-tint`): the same three states laid down lightly, used where ink text sits on the colour: month-grid cells, the highlighter stroke behind the verdict words, the light half of the overspend hatch. Amber Wash doubles as the text-selection colour.
+- **Green Wash** (`green-tint`), **Amber Wash** (`amber-tint`), **Red Wash** (`red-tint`): the same three states laid down lightly, used where ink text sits on the colour: month-grid cells and the light half of the overspend hatch. Amber Wash doubles as the text-selection colour.
 
 ### Neutral
 - **Planner Paper** (`paper`): the page and every surface. There is no second surface colour.
@@ -190,12 +180,12 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 **Character:** a tall, condensed grotesk in caps for everything that reads like lettering on a planner (masthead, section heads, month names, chart labels, headline figures), paired with a neutral system sans for sentences and tables so long reading stays comfortable.
 
 ### Hierarchy
-- **Display** (`typography.display`): the verdict sentence only, once per report, balanced across lines.
+- **Display** (`typography.display`): currently unused; reserved for a single headline sentence.
 - **Headline** (`typography.headline`, uppercase): the masthead title.
 - **Title** (`typography.title`, uppercase): section headings, sitting on a 1.5px ink rule.
 - **Figure** (`typography.figure`): headline numbers inside and under the pace chart (spent, budget, over / to spare).
 - **Label** (`typography.label`, uppercase): month column heads, the TODAY label, chart end labels; axis values use the 500 weight at 0.04em in Pencil Grey.
-- **Lead** (`typography.lead`): the verdict explanation, max 62ch.
+- **Lead** (`typography.lead`): currently unused.
 - **Body** (`typography.body`): ledes (Pencil Grey, max 75ch), list rows, summaries. Category names in rows are 600.
 - **Small** (`typography.small`): column heads, sub-figures, keys, footer, month-cell amounts. Transaction tables run at 14px.
 - **Mono** (`typography.mono`): fingerprints, select-all on click.
@@ -203,17 +193,17 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 ### Named Rules
 **The Tabular Figures Rule.** `font-variant-numeric: tabular-nums` is set on the body and inherited everywhere. Amounts are right-aligned, Danish-formatted (1.234 / 1.234,50), and never wrap.
 
-**The Lettering Rule.** The condensed face is for planner lettering: short caps labels, headings and headline figures. It never sets a sentence other than the verdict, and never sets table body text.
+**The Lettering Rule.** The condensed face is for planner lettering: short caps labels, headings and headline figures. It never sets a sentence, and never sets table body text.
 
 ## Layout
 
 A single column, max 1180px, centred, with 16px side padding and a 32px top margin. The masthead is a flex row (title left, window and last import right) closed by a 3px ink rule; the footer opens with the same rule, 72px below the last section. Sections are 64px apart, each opened by its title on a 1.5px ink rule and a Pencil Grey lede.
 
-Tables are grids of rules rather than boxes. The ranked list is a five-column grid (name, bar track, % of limit, spent, limit and left) with 16px gaps and 11px row padding. The month grid is a fixed-layout table with a 196px name column and one column per window month, each separated by a 1px ink rule like planner columns; it keeps a 980px minimum width and scrolls horizontally inside its wrapper rather than squeezing.
+Tables are grids of rules rather than boxes. The ranked list is a six-column grid (name, bar track, % of limit, per-month budget, spent, limit and left) with 16px gaps and 11px row padding. The month grid is a fixed-layout table with a 196px name column and one column per window month, each separated by a 1px ink rule like planner columns; it keeps a 980px minimum width and scrolls horizontally inside its wrapper rather than squeezing.
 
 **Responsive (max-width 760px):**
 - Page top padding drops to 20px; sections to 48px apart; the lead to 17px.
-- Ranked rows collapse to two columns: name and % of limit on the first line, the bar track full-width beneath; spent, limit and the column-head row are hidden.
+- Ranked rows collapse: name, "… per month" in Pencil Grey and % of limit on the first line, the bar track full-width beneath; spent, limit and the column-head row are hidden.
 - The pace chart keeps its drawing but hides all SVG text; a three-up figure row (Spent, Budget, Over / To spare) below the chart carries the numbers, with the over figure in red.
 - The month grid's name column narrows to 136px and wraps; the grid still scrolls sideways.
 - Transaction summaries drop the count to a second line; the fingerprint column is hidden and the table loses its indent.
@@ -227,15 +217,12 @@ Flat. Nothing floats. There are no cards, no panels and no elevation shadows; hi
 
 ## Shapes
 
-Square by default. Rules and columns are straight lines. The only softening is marker-tip rounding: 2px on bar fills, month-cell ink and key swatches, 3px on the verdict highlighter stroke, and round 9px dots for notes. The limit tick is a hard 2px ink bar, square. Overspend is a -45 degree hatch (3px red, 3px red wash). The disclosure chevron is drawn from two 1.5px ink borders rotated, not a glyph.
+Square by default. Rules and columns are straight lines. The only softening is marker-tip rounding: 2px on bar fills, month-cell ink and key swatches, and round 9px dots for notes. The limit tick is a hard 2px ink bar, square. Overspend is a -45 degree hatch (3px red, 3px red wash). The disclosure chevron is drawn from two 1.5px ink borders rotated, not a glyph.
 
 ## Components
 
-### Verdict
-The one answer, first. A display-size sentence ("Over budget by ... DKK" / "Within budget, ... DKK to spare") with the key words marked by a highlighter stroke: a wash band from 52% to 92% of the line height, red wash when over, green wash when within. Below it a lead sentence with spent, budget and percentage, then an optional notes list.
-
 ### Notes list
-Ruled list between hairlines (`rule`), each item led by a 9px round dot: amber for coverage and data notes, red only for the needs-review link.
+Sits directly under the masthead, before the first section. Ruled list between hairlines (`rule`), each item led by a 9px round dot: amber for coverage and data notes, red only for the needs-review link.
 
 ### Section heading
 Condensed caps title with 0.12em tracking on a 1.5px ink rule, followed by a Pencil Grey lede that says how to read the chart below.
@@ -244,7 +231,7 @@ Condensed caps title with 0.12em tracking on a 1.5px ink rule, followed by a Pen
 Server-rendered SVG, 1000 by 300 user units, full width. Month columns ruled in ink with alternate columns shaded, labelled in caps above the plot; light horizontal gridlines with short axis labels (500k, 1 mio.). The budget accrues as a straight dashed ink line (1.5px, 6/5 dash) ending in an open circle; cumulative spending is a 4px stepped marker stroke in the year's state colour ending in a filled dot. A 2.5px ink "today" edge closes the plot. At the right edge, a bracket and label in red (OVER) or green (TO SPARE) state the gap, with SPENT and BUDGET values beside their line ends. With motion allowed, the stroke draws in over 1.4s (cubic-bezier(.16, 1, .3, 1)) and the dot appears after.
 
 ### Limit bars (signature)
-Each category measured against its own yearly limit, never against the total or the other categories: share of the total is deliberately not shown. Every track runs from 0 to 200% of that category's limit, so the limit sits at the same place on every row and is drawn as one continuous 2px ink line down the list, labelled LIMIT in the column head. Rows are sorted by % of limit, most over first. A dotted baseline marks the track; the fill is the state colour up to the limit, and spending beyond it continues past the line as the red hatch. Past 200% the hatch is cut off with a notched end. Right-hand columns give % of limit as a headline figure (red when over), spent, and limit (with left, or over in red). A total row sits on a 1.5px ink rule. A key below spells out every mark.
+Each category measured against its own yearly limit, never against the total or the other categories: share of the total is deliberately not shown. Every track runs from 0 to 200% of that category's limit, so the limit sits at the same place on every row and is drawn as one continuous 2px ink line down the list, labelled LIMIT in the column head. Rows are sorted by % of limit, most over first. A dotted baseline marks the track; the fill is the state colour up to the limit, and spending beyond it continues past the line as the red hatch. Past 200% the hatch is cut off with a notched end. Right-hand columns give % of limit as a headline figure (red when over), the monthly budget (yearly limit / 12), spent, and limit (with left, or over in red). A total row sits on a 1.5px ink rule. A key below spells out every mark.
 
 ### Month grid (signature)
 The planner itself: categories down, months across, each cell filled from the bottom with a marker wash against that month's prorated share of the yearly limit (partial first and last months get a partial share). Fill height caps at full; green, amber or red wash by state, and an over-share cell gets a 3px red top edge. The amount sits top-right in small text; empty months stay blank. Alternate rows carry the column shade. A total row closes the grid on a 1.5px ink rule.

@@ -32,20 +32,15 @@
   .masthead h1 { font: 700 26px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 0; }
   .masthead p { margin: 0; color: var(--muted); font-size: 13.5px; }
 
-  /* Verdict */
-  .verdict { padding: 40px 0 8px; }
-  .verdict h2 { font: 700 clamp(40px, 6.4vw, 76px)/.95 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
-  .verdict h2 .mark { padding: 0 .08em; margin: 0 -.04em; border-radius: 3px;
-                      background: linear-gradient(transparent 52%, var(--mark) 52%, var(--mark) 92%, transparent 92%); }
-  .verdict.over { --mark: var(--red-tint); } .verdict.under { --mark: var(--green-tint); }
-  .verdict p { font-size: 19px; line-height: 1.45; max-width: 62ch; margin: 18px 0 0; }
-  .notes { margin: 22px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  /* Notes: coverage warnings and the needs-review link, right under the masthead */
+  .notes { margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
   .notes li { padding: 9px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 12px; align-items: baseline; }
   .notes li::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--amber); transform: translateY(-1px); }
   .notes li.alert::before { background: var(--red); }
 
   /* Section headings: condensed caps over a ruled line */
   section { margin-top: 64px; }
+  .masthead + section, .notes + section { margin-top: 40px; }
   section > h2 { font: 700 15px/1 var(--display); letter-spacing: .12em; text-transform: uppercase;
                  margin: 0 0 6px; padding-bottom: 9px; border-bottom: 1.5px solid var(--ink); }
   .lede { color: var(--muted); margin: 12px 0 18px; max-width: 75ch; }
@@ -80,7 +75,7 @@
 
   /* Where the money went: each category against its own limit; the limit is one ruled line down the list */
   .ranked { margin: 0; }
-  .rank-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) minmax(200px, 3fr) 76px 110px 120px;
+  .rank-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) minmax(200px, 3fr) 76px 96px 110px 120px;
               gap: 16px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--hair); }
   .rank-row.head { padding: 6px 0; border-bottom-color: var(--rule); color: var(--muted); font-size: 12.5px; }
   .rank-row.total { border-top: 1.5px solid var(--ink); border-bottom: 0; font-weight: 650; }
@@ -160,11 +155,11 @@
 
   @media (max-width: 760px) {
     body { padding-top: 20px; }
-    .verdict { padding-top: 28px; }
-    .verdict p { font-size: 17px; }
     section { margin-top: 48px; }
-    .rank-row { grid-template-columns: 1fr auto; gap: 8px 12px; }
-    .rank-row .name { grid-column: 1; } .rank-row .used { grid-column: 2; grid-row: 1; }
+    .rank-row { grid-template-columns: 1fr auto auto; gap: 8px 14px; align-items: baseline; }
+    .rank-row .name { grid-column: 1; } .rank-row .month-limit { grid-column: 2; grid-row: 1; color: var(--muted); font-size: 13.5px; }
+    .rank-row .used { grid-column: 3; grid-row: 1; }
+    .rank-row .month-limit small.sr { position: static; width: auto; height: auto; overflow: visible; clip-path: none; display: inline; font-size: inherit; }
     .rank-row .track { grid-column: 1 / -1; grid-row: 2; margin: 0; height: 22px; }
     .rank-row .spent, .rank-row .limit-col { display: none; }
     .rank-row.head { display: none; }
@@ -191,25 +186,58 @@
   <p>{{ b.window.first_day.strftime('%d.%m.%Y') }} – {{ b.window.end.strftime('%d.%m.%Y') }} · last import {{ last_import or 'never' }}</p>
 </header>
 
-{% set over = b.total_spent > b.total_limit %}
-<div class="verdict {{ 'over' if over else 'under' }}">
-  <h2>
-    {%- if over -%}<span class="mark">Over budget</span> by {{ (-b.total_remaining)|money }} {{ currency }}
-    {%- else -%}<span class="mark">Within budget</span>, {{ b.total_remaining|money }} {{ currency }} to spare{%- endif -%}
-  </h2>
-  <p>
-    {{ b.total_spent|money }} {{ currency }} spent against a budget of {{ b.total_limit|money }} {{ currency }}
-    over these twelve months{% if b.total_used_pct is not none %} ({{ '%.0f'|format(b.total_used_pct) }}%){% endif %}.
-    {% if over_count %}{{ over_count }} of {{ b.lines|length }} categories are over their limit.{% else %}Every category is within its limit.{% endif %}
-  </p>
-  {% if b.coverage_warnings or b.needs_review or b.uncategorized_spent %}
-  <ul class="notes">
-    {% for w in b.coverage_warnings %}<li>{{ w }}</li>{% endfor %}
-    {% if b.needs_review %}<li class="alert"><span><a href="#review">{{ b.needs_review|length }} transactions need review</a>: uncategorized or a low-confidence category.</span></li>{% endif %}
-    {% if b.uncategorized_spent %}<li>{{ b.uncategorized_spent|money }} {{ currency }} of uncategorized spending is not included in the totals.</li>{% endif %}
-  </ul>
-  {% endif %}
-</div>
+{% if b.coverage_warnings or b.needs_review or b.uncategorized_spent %}
+<ul class="notes">
+  {% for w in b.coverage_warnings %}<li>{{ w }}</li>{% endfor %}
+  {% if b.needs_review %}<li class="alert"><span><a href="#review">{{ b.needs_review|length }} transactions need review</a>: uncategorized or a low-confidence category.</span></li>{% endif %}
+  {% if b.uncategorized_spent %}<li>{{ b.uncategorized_spent|money }} {{ currency }} of uncategorized spending is not included in the totals.</li>{% endif %}
+</ul>
+{% endif %}
+
+<section aria-labelledby="where-h">
+  <h2 id="where-h">Where the money went</h2>
+  <p class="lede">Each category against its own yearly limit. The black line is the limit: a bar that crosses it is over. Most over the limit first.</p>
+  <div class="ranked" role="table" aria-label="Spending by category against each category's limit">
+    <div class="rank-row head" role="row">
+      <span role="columnheader">Category</span>
+      <div class="track" role="columnheader"><span class="mark">0</span><span class="mark at-limit" style="left: {{ ranked[0].limit_pct if ranked else 50 }}%">Limit</span><span class="mark at-end">{{ rank_scale }}%</span>{% if ranked %}<span class="limit" style="left: {{ ranked[0].limit_pct }}%"></span>{% endif %}</div>
+      <span class="num" role="columnheader">Of limit</span>
+      <span class="num" role="columnheader">Per month</span>
+      <span class="num" role="columnheader">Spent</span><span class="num limit-col" role="columnheader">Limit · left</span>
+    </div>
+    {% for r in ranked %}
+    {% set used = '%.0f'|format(r.used_pct) ~ '%' if r.used_pct is not none else '–' %}
+    <div class="rank-row" role="row">
+      <span class="name" role="cell">{{ r.name }}</span>
+      <div class="track" role="cell" aria-label="{{ used }} of limit">
+        <span class="fill bg-{{ r.state or 'green' }}" style="width: {{ [r.bar_pct, r.limit_pct]|min|round(2) }}%"></span>
+        {% if r.bar_pct > r.limit_pct %}<span class="over{{ ' capped' if r.capped }}" style="left: {{ r.limit_pct|round(2) }}%; width: {{ (r.bar_pct - r.limit_pct)|round(2) }}%"></span>{% endif %}
+        {% if r.limit %}<span class="limit" style="left: {{ r.limit_pct|round(2) }}%"></span>{% endif %}
+      </div>
+      <span class="num used{{ ' neg' if r.state == 'red' }}" role="cell">{{ used }}</span>
+      <span class="num month-limit" role="cell">{{ r.month_limit|money }}<small class="sr"> per month</small></span>
+      <span class="num spent" role="cell">{{ r.spent|money }}</span>
+      <span class="num limit-col" role="cell">{{ r.limit|money }}{% if r.limit is none %}<small>–</small>{% elif r.spent > r.limit %}<small class="neg">{{ (r.spent - r.limit)|money }} over</small>{% else %}<small>{{ (r.limit - r.spent)|money }} left</small>{% endif %}</span>
+    </div>
+    {% endfor %}
+    <div class="rank-row total" role="row">
+      <span class="name" role="cell">Total</span><span role="cell"></span>
+      <span class="num used{{ ' neg' if b.total_remaining < 0 }}" role="cell">{{ '%.0f'|format(b.total_used_pct) ~ '%' if b.total_used_pct is not none else '–' }}</span>
+      <span class="num month-limit" role="cell">{{ (b.total_limit / 12)|money }}<small class="sr"> per month</small></span>
+      <span class="num spent" role="cell">{{ b.total_spent|money }}</span>
+      <span class="num limit-col" role="cell">{{ b.total_limit|money }}{% if b.total_remaining < 0 %}<small class="neg">{{ (-b.total_remaining)|money }} over</small>{% else %}<small>{{ b.total_remaining|money }} left</small>{% endif %}</span>
+    </div>
+  </div>
+  <div class="scale-note">
+    <span class="key"><i class="bg-green"></i>Under 75% of limit</span>
+    <span class="key"><i class="bg-amber"></i>75–100%</span>
+    <span class="key"><i class="bg-red"></i>Over the limit</span>
+    <span class="key"><i class="hatch"></i>Spending beyond the limit</span>
+    <span class="key"><i class="cut"></i>More than {{ rank_scale }}%, cut off</span>
+    <span class="key"><i class="tick"></i>Yearly limit</span>
+    <span>Amounts in {{ currency }}.</span>
+  </div>
+</section>
 
 <section class="pace" aria-labelledby="pace-h">
   <h2 id="pace-h">The year against the budget</h2>
@@ -255,48 +283,6 @@
     <div><dt>Budget</dt><dd>{{ pace.limit|money }}</dd></div>
     <div class="{{ 'neg' if gap > 0 }}"><dt>{{ 'Over' if gap > 0 else 'To spare' }}</dt><dd>{{ gap|abs|money }}</dd></div>
   </dl>
-</section>
-
-<section aria-labelledby="where-h">
-  <h2 id="where-h">Where the money went</h2>
-  <p class="lede">Each category against its own yearly limit. The black line is the limit: a bar that crosses it is over. Most over the limit first.</p>
-  <div class="ranked" role="table" aria-label="Spending by category against each category's limit">
-    <div class="rank-row head" role="row">
-      <span role="columnheader">Category</span>
-      <div class="track" role="columnheader"><span class="mark">0</span><span class="mark at-limit" style="left: {{ ranked[0].limit_pct if ranked else 50 }}%">Limit</span><span class="mark at-end">{{ rank_scale }}%</span>{% if ranked %}<span class="limit" style="left: {{ ranked[0].limit_pct }}%"></span>{% endif %}</div>
-      <span class="num" role="columnheader">Of limit</span>
-      <span class="num" role="columnheader">Spent</span><span class="num limit-col" role="columnheader">Limit · left</span>
-    </div>
-    {% for r in ranked %}
-    {% set used = '%.0f'|format(r.used_pct) ~ '%' if r.used_pct is not none else '–' %}
-    <div class="rank-row" role="row">
-      <span class="name" role="cell">{{ r.name }}</span>
-      <div class="track" role="cell" aria-label="{{ used }} of limit">
-        <span class="fill bg-{{ r.state or 'green' }}" style="width: {{ [r.bar_pct, r.limit_pct]|min|round(2) }}%"></span>
-        {% if r.bar_pct > r.limit_pct %}<span class="over{{ ' capped' if r.capped }}" style="left: {{ r.limit_pct|round(2) }}%; width: {{ (r.bar_pct - r.limit_pct)|round(2) }}%"></span>{% endif %}
-        {% if r.limit %}<span class="limit" style="left: {{ r.limit_pct|round(2) }}%"></span>{% endif %}
-      </div>
-      <span class="num used{{ ' neg' if r.state == 'red' }}" role="cell">{{ used }}</span>
-      <span class="num spent" role="cell">{{ r.spent|money }}</span>
-      <span class="num limit-col" role="cell">{{ r.limit|money }}{% if r.limit is none %}<small>–</small>{% elif r.spent > r.limit %}<small class="neg">{{ (r.spent - r.limit)|money }} over</small>{% else %}<small>{{ (r.limit - r.spent)|money }} left</small>{% endif %}</span>
-    </div>
-    {% endfor %}
-    <div class="rank-row total" role="row">
-      <span class="name" role="cell">Total</span><span role="cell"></span>
-      <span class="num used{{ ' neg' if b.total_remaining < 0 }}" role="cell">{{ '%.0f'|format(b.total_used_pct) ~ '%' if b.total_used_pct is not none else '–' }}</span>
-      <span class="num spent" role="cell">{{ b.total_spent|money }}</span>
-      <span class="num limit-col" role="cell">{{ b.total_limit|money }}{% if b.total_remaining < 0 %}<small class="neg">{{ (-b.total_remaining)|money }} over</small>{% else %}<small>{{ b.total_remaining|money }} left</small>{% endif %}</span>
-    </div>
-  </div>
-  <div class="scale-note">
-    <span class="key"><i class="bg-green"></i>Under 75% of limit</span>
-    <span class="key"><i class="bg-amber"></i>75–100%</span>
-    <span class="key"><i class="bg-red"></i>Over the limit</span>
-    <span class="key"><i class="hatch"></i>Spending beyond the limit</span>
-    <span class="key"><i class="cut"></i>More than {{ rank_scale }}%, cut off</span>
-    <span class="key"><i class="tick"></i>Yearly limit</span>
-    <span>Amounts in {{ currency }}.</span>
-  </div>
 </section>
 
 <section aria-labelledby="months-h">

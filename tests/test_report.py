@@ -29,7 +29,7 @@ def test_report_is_self_contained_and_shows_budget(config):
 
     assert "<script" not in html and "http" not in html.replace("http-equiv", "")
     assert "Groceries" in html and "1.500" in html
-    assert "Within budget" in html
+    assert "Within budget" not in html and "Over budget" not in html  # no verdict headline
     assert "fill bg-red" in html
     assert over.fingerprint[:12] in html
     assert review.fingerprint[:12] in html and "Needs review" in html
@@ -117,3 +117,22 @@ def test_where_the_money_went_shows_use_of_limit_not_share_of_total(config):
     where = html[html.index('id="where-h"'):html.index('id="months-h"')]
     assert "Share" not in where
     assert ">400%<" in where and 'class="over capped"' in where
+
+
+def test_where_the_money_went_shows_each_category_monthly_budget(config):
+    config = at(config, "2026-01-31")
+    b = compute([st("2026-01-05", "-60000", "Housing")], config)
+    assert {r.name: r.month_limit for r in ranked_lines(b)}["Housing"] == Decimal("10000")
+    html = render(b, config, None)
+    where = html[html.index('id="where-h"'):html.index("</section>", html.index('id="where-h"'))]
+    assert "Per month" in where
+    housing = where[where.index(">Housing<"):]
+    assert ">10.000<" in housing[:housing.index('class="rank-row')]
+    total = where[where.index(">Total<"):]
+    assert f">{money(b.total_limit / 12)}<" in total
+
+
+def test_where_the_money_went_comes_before_the_charts(config):
+    config = at(config, "2026-01-31")
+    html = render(compute([st("2026-01-05", "-100", "Groceries")], config), config, None)
+    assert html.index('id="where-h"') < html.index('id="pace-h"') < html.index('id="months-h"')
