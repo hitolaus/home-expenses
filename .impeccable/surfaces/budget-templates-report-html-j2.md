@@ -23,6 +23,6 @@ STORY: They see the verdict for the year, then how the year unfolded against the
 
 FIRST VIEWPORT: A masthead line (title, window, last import). Then a monumental verdict sentence across the width: "Under budget / Over budget", with spent of limit and what's left (raise from Isotype: one answer first). Below that, a full-width planner chart: month columns ruled like the wall planner, the budget accruing as a straight ruled line, cumulative spending as a marker stroke, and the gap at the right edge labelled.
 
-FORM: Kitchen wall year planner. My #1 grounded candidate, chosen by the user as the pick card over the rolled Isotype direction. Seed key 7ac860b5. Raise from Isotype: categories rank as counted bars with the limit as a tick, so "where did the money go" is answered by length.
+FORM: Kitchen wall year planner. My #1 grounded candidate, chosen by the user as the pick card over the rolled Isotype direction. Seed key 7ac860b5. Each category is drawn against its own limit, the limit one ruled line down the list, so "which categories are over" is answered at a glance (user correction: share of total confuses).
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

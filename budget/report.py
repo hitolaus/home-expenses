@@ -137,29 +137,31 @@ def pace_chart(budget: Budget) -> PaceChart:
     )
 
 
+RANK_SCALE = 200  # a track runs from 0 to 200% of the category's own limit
+
+
 @dataclass
 class RankedLine:
     name: str
     spent: Decimal
     limit: Decimal | None
     used_pct: float | None
-    share_pct: float
-    bar_pct: float    # spent, as % of the widest bar
-    limit_pct: float  # the limit's position on the same scale
+    bar_pct: float    # used % of limit, as % of the track
+    limit_pct: float  # the limit's position on the track, the same for every category
+    capped: bool      # used more than the track shows
     state: str
 
 
 def ranked_lines(budget: Budget) -> list[RankedLine]:
-    """Budgeted categories, biggest spending first, on one shared scale so lengths compare."""
-    scale = max([Decimal(1)] + [max(ln.spent, ln.limit or 0) for ln in budget.lines])
-    total = budget.total_spent
+    """Budgeted categories, most used of their own limit first, so over-limit ones lead."""
     out = []
-    for ln in sorted(budget.lines, key=lambda ln: ln.spent, reverse=True):
+    for ln in sorted(budget.lines, key=lambda ln: ln.used_pct or 0.0, reverse=True):
+        used = max(ln.used_pct or 0.0, 0.0)
         out.append(RankedLine(
             name=ln.name, spent=ln.spent, limit=ln.limit, used_pct=ln.used_pct,
-            share_pct=float(ln.spent / total * 100) if total > 0 else 0.0,
-            bar_pct=float(max(ln.spent, Decimal(0)) / scale * 100),
-            limit_pct=float((ln.limit or 0) / scale * 100),
+            bar_pct=min(used, RANK_SCALE) / RANK_SCALE * 100,
+            limit_pct=100 / RANK_SCALE * 100,
+            capped=used > RANK_SCALE,
             state=bar_class(ln.used_pct),
         ))
     return out
@@ -214,6 +216,7 @@ def render(budget: Budget, config: Config, last_import: str | None) -> str:
         pace=pace_chart(budget),
         chart=dict(w=CHART_W, h=CHART_H, left=CHART_LEFT, top=CHART_TOP, bottom=CHART_H - CHART_BOTTOM),
         ranked=ranked_lines(budget),
+        rank_scale=RANK_SCALE,
         grid=month_grid(budget),
         over_count=sum(1 for ln in budget.lines if ln.used_pct is not None and ln.used_pct > 100),
         fonts={w: font_data_uri(w) for w in (500, 700)},

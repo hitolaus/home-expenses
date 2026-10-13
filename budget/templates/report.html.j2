@@ -78,28 +78,40 @@
     @keyframes appear { to { opacity: 1; } }
   }
 
-  /* Where the money went: ranked rows on one shared scale */
+  /* Where the money went: each category against its own limit; the limit is one ruled line down the list */
   .ranked { margin: 0; }
-  .rank-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) minmax(200px, 3fr) 110px 120px 64px;
+  .rank-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) minmax(200px, 3fr) 76px 110px 120px;
               gap: 16px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--hair); }
   .rank-row.head { padding: 6px 0; border-bottom-color: var(--rule); color: var(--muted); font-size: 12.5px; }
   .rank-row.total { border-top: 1.5px solid var(--ink); border-bottom: 0; font-weight: 650; }
   .rank-row .name { font-weight: 600; }
   .rank-row .num { text-align: right; white-space: nowrap; }
   .rank-row .num small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
+  .rank-row .used { font: 500 22px/1 var(--display); }
+  .rank-row.total .used { font-weight: 700; }
   .neg, .rank-row .num small.neg { color: var(--red); }
-  .track { position: relative; height: 18px; }
+  .track { position: relative; align-self: stretch; min-height: 18px; margin: -11px 0; }
   .track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dotted var(--rule); }
-  .track .fill { position: absolute; left: 0; top: 2px; bottom: 2px; border-radius: 2px; }
-  .track .over { position: absolute; top: 2px; bottom: 2px; border-radius: 0 2px 2px 0;
+  .track .fill, .track .over { position: absolute; top: 50%; height: 14px; margin-top: -7px; }
+  .track .fill { left: 0; border-radius: 2px; }
+  .track .over { border-radius: 0 2px 2px 0;
                  background: repeating-linear-gradient(-45deg, var(--red) 0 3px, var(--red-tint) 3px 6px); }
-  .track .limit { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); }
+  .track .over.capped { border-radius: 0; clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%); }
+  .track .limit { position: absolute; top: 0; bottom: -1px; width: 2px; margin-left: -1px; background: var(--ink); }
+  .head .track { margin: -6px 0; }
+  .head .track::before { display: none; }
+  .head .track .mark { position: absolute; bottom: 7px; font: 700 12px/1 var(--display); letter-spacing: .08em;
+                       text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .head .track .mark.at-limit { margin-left: 8px; color: var(--ink); }
+  .head .track .mark.at-end { right: 0; }
   .bg-green { background: var(--green); } .bg-amber { background: var(--amber); } .bg-red { background: var(--red); }
   .scale-note { display: flex; gap: 22px; flex-wrap: wrap; color: var(--muted); font-size: 12.5px; margin-top: 12px; }
   .key { display: inline-flex; align-items: center; gap: 7px; }
   .key i { display: inline-block; width: 18px; height: 10px; border-radius: 2px; }
   .key i.tick { width: 2px; height: 16px; background: var(--ink); border-radius: 0; }
   .key i.hatch { background: repeating-linear-gradient(-45deg, var(--red) 0 3px, var(--red-tint) 3px 6px); }
+  .key i.cut { background: repeating-linear-gradient(-45deg, var(--red) 0 3px, var(--red-tint) 3px 6px); border-radius: 0;
+               clip-path: polygon(0 0, 100% 0, calc(100% - 5px) 50%, 100% 100%, 0 100%); }
 
   /* Month-by-month planner */
   .scroll { overflow-x: auto; scrollbar-color: var(--rule) transparent; }
@@ -151,10 +163,10 @@
     .verdict { padding-top: 28px; }
     .verdict p { font-size: 17px; }
     section { margin-top: 48px; }
-    .rank-row { grid-template-columns: 1fr auto; gap: 6px 12px; }
-    .rank-row .name { grid-column: 1; } .rank-row .spent { grid-column: 2; grid-row: 1; }
-    .rank-row .track { grid-column: 1 / -1; grid-row: 2; }
-    .rank-row .limit-col, .rank-row .share { display: none; }
+    .rank-row { grid-template-columns: 1fr auto; gap: 8px 12px; }
+    .rank-row .name { grid-column: 1; } .rank-row .used { grid-column: 2; grid-row: 1; }
+    .rank-row .track { grid-column: 1 / -1; grid-row: 2; margin: 0; height: 22px; }
+    .rank-row .spent, .rank-row .limit-col { display: none; }
     .rank-row.head { display: none; }
     summary { grid-template-columns: 18px 1fr auto; }
     summary .count { grid-column: 2; grid-row: 2; }
@@ -247,31 +259,33 @@
 
 <section aria-labelledby="where-h">
   <h2 id="where-h">Where the money went</h2>
-  <p class="lede">Categories ranked by what they cost over the twelve months, all on the same scale. The black tick is each category's yearly limit.</p>
-  <div class="ranked" role="table" aria-label="Spending by category">
+  <p class="lede">Each category against its own yearly limit. The black line is the limit: a bar that crosses it is over. Most over the limit first.</p>
+  <div class="ranked" role="table" aria-label="Spending by category against each category's limit">
     <div class="rank-row head" role="row">
-      <span role="columnheader">Category</span><span role="columnheader">Spent against limit</span>
+      <span role="columnheader">Category</span>
+      <div class="track" role="columnheader"><span class="mark">0</span><span class="mark at-limit" style="left: {{ ranked[0].limit_pct if ranked else 50 }}%">Limit</span><span class="mark at-end">{{ rank_scale }}%</span>{% if ranked %}<span class="limit" style="left: {{ ranked[0].limit_pct }}%"></span>{% endif %}</div>
+      <span class="num" role="columnheader">Of limit</span>
       <span class="num" role="columnheader">Spent</span><span class="num limit-col" role="columnheader">Limit · left</span>
-      <span class="num share" role="columnheader">Share</span>
     </div>
     {% for r in ranked %}
+    {% set used = '%.0f'|format(r.used_pct) ~ '%' if r.used_pct is not none else '–' %}
     <div class="rank-row" role="row">
       <span class="name" role="cell">{{ r.name }}</span>
-      <div class="track" role="cell" aria-label="{{ '%.0f'|format(r.used_pct) if r.used_pct is not none else '–' }}% of limit">
+      <div class="track" role="cell" aria-label="{{ used }} of limit">
         <span class="fill bg-{{ r.state or 'green' }}" style="width: {{ [r.bar_pct, r.limit_pct]|min|round(2) }}%"></span>
-        {% if r.bar_pct > r.limit_pct %}<span class="over" style="left: {{ r.limit_pct|round(2) }}%; width: {{ (r.bar_pct - r.limit_pct)|round(2) }}%"></span>{% endif %}
+        {% if r.bar_pct > r.limit_pct %}<span class="over{{ ' capped' if r.capped }}" style="left: {{ r.limit_pct|round(2) }}%; width: {{ (r.bar_pct - r.limit_pct)|round(2) }}%"></span>{% endif %}
         {% if r.limit %}<span class="limit" style="left: {{ r.limit_pct|round(2) }}%"></span>{% endif %}
       </div>
-      <span class="num spent" role="cell">{{ r.spent|money }}<small>{{ '%.0f'|format(r.used_pct) if r.used_pct is not none else '–' }}% of limit</small></span>
+      <span class="num used{{ ' neg' if r.state == 'red' }}" role="cell">{{ used }}</span>
+      <span class="num spent" role="cell">{{ r.spent|money }}</span>
       <span class="num limit-col" role="cell">{{ r.limit|money }}{% if r.limit is none %}<small>–</small>{% elif r.spent > r.limit %}<small class="neg">{{ (r.spent - r.limit)|money }} over</small>{% else %}<small>{{ (r.limit - r.spent)|money }} left</small>{% endif %}</span>
-      <span class="num share" role="cell">{{ '%.0f'|format(r.share_pct) }}%</span>
     </div>
     {% endfor %}
     <div class="rank-row total" role="row">
       <span class="name" role="cell">Total</span><span role="cell"></span>
-      <span class="num spent" role="cell">{{ b.total_spent|money }}<small>{{ '%.0f'|format(b.total_used_pct) if b.total_used_pct is not none else '–' }}% of limit</small></span>
+      <span class="num used{{ ' neg' if b.total_remaining < 0 }}" role="cell">{{ '%.0f'|format(b.total_used_pct) ~ '%' if b.total_used_pct is not none else '–' }}</span>
+      <span class="num spent" role="cell">{{ b.total_spent|money }}</span>
       <span class="num limit-col" role="cell">{{ b.total_limit|money }}{% if b.total_remaining < 0 %}<small class="neg">{{ (-b.total_remaining)|money }} over</small>{% else %}<small>{{ b.total_remaining|money }} left</small>{% endif %}</span>
-      <span class="num share" role="cell">100%</span>
     </div>
   </div>
   <div class="scale-note">
@@ -279,6 +293,7 @@
     <span class="key"><i class="bg-amber"></i>75–100%</span>
     <span class="key"><i class="bg-red"></i>Over the limit</span>
     <span class="key"><i class="hatch"></i>Spending beyond the limit</span>
+    <span class="key"><i class="cut"></i>More than {{ rank_scale }}%, cut off</span>
     <span class="key"><i class="tick"></i>Yearly limit</span>
     <span>Amounts in {{ currency }}.</span>
   </div>

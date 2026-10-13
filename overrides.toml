@@ -1,0 +1,13 @@
+# Overrides always win over Claude and are re-applied on every run.
+
+# Match by description substring (case-insensitive) -> category.
+# The first matching rule wins.
+[rules]
+# Groceries are paid from the food account; transfers to it count as groceries.
+"TIL FOOD" = "Groceries"
+"MADKONTO" = "Groceries"
+# The MasterCard is only used for vacations; paying it off counts as vacation.
+"MASTERCARD" = "Vacation"
+
+# Or pin a single transaction by fingerprint (prefix shown in the report, min. 8 chars).
+[transactions]

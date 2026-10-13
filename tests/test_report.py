@@ -64,17 +64,22 @@ def test_pace_chart_ends_at_total_spent_and_full_budget(config):
     assert len(pace.months) == len(b.months)
 
 
-def test_ranked_lines_sort_by_spending_on_a_shared_scale(config):
+def test_ranked_lines_measure_each_category_against_its_own_limit(config):
     config = at(config, "2026-01-31")
-    b = compute([st("2026-01-05", "-1500", "Groceries"),         # limit 1000: over
-                 st("2026-01-05", "-60000", "Housing"),          # limit 120000: largest scale
-                 st("2026-01-05", "-100", "Transport")], config)
-    ranked = ranked_lines(b)
-    assert [r.name for r in ranked][:3] == ["Housing", "Groceries", "Transport"]
-    housing, groceries = ranked[0], ranked[1]
-    assert housing.limit_pct == 100 and housing.bar_pct == 50
-    assert groceries.state == "red" and groceries.bar_pct > groceries.limit_pct
-    assert round(sum(r.share_pct for r in ranked), 6) == 100
+    b = compute([st("2026-01-05", "-1500", "Groceries"),         # limit 1000: 150%
+                 st("2026-01-05", "-60000", "Housing"),          # limit 120000: 50%, biggest amount
+                 st("2026-01-05", "-100", "Transport"),          # limit 1000: 10%
+                 st("2026-01-05", "-2000", "Miscellaneous")], config)  # limit 500: 400%
+    ranked = {r.name: r for r in ranked_lines(b)}
+    # Most over the limit first, regardless of the amount spent
+    assert [r.name for r in ranked_lines(b)][:4] == ["Miscellaneous", "Groceries", "Housing", "Transport"]
+    # The limit sits at the same place on every track, so bars compare as % of limit
+    assert ranked["Housing"].bar_pct == 25 and ranked["Groceries"].bar_pct == 75
+    assert ranked["Transport"].bar_pct == 5
+    assert all(r.limit_pct == 50 for r in ranked.values())
+    assert ranked["Groceries"].state == "red" and not ranked["Groceries"].capped
+    # Beyond the end of the track the bar is cut off and marked as such
+    assert ranked["Miscellaneous"].bar_pct == 100 and ranked["Miscellaneous"].capped
 
 
 def test_month_grid_prorates_the_allowance_for_partial_months(config):
@@ -103,3 +108,12 @@ def test_overspending_reads_as_over_not_negative_left(config):
     config = at(config, "2026-01-31")
     html = render(compute([st("2026-01-05", "-1500", "Groceries")], config), config, None)
     assert "500 over" in html and "-500 left" not in html
+
+
+def test_where_the_money_went_shows_use_of_limit_not_share_of_total(config):
+    config = at(config, "2026-01-31")
+    html = render(compute([st("2026-01-05", "-2000", "Miscellaneous"),    # limit 500: 400%
+                           st("2026-01-05", "-60000", "Housing")], config), config, None)
+    where = html[html.index('id="where-h"'):html.index('id="months-h"')]
+    assert "Share" not in where
+    assert ">400%<" in where and 'class="over capped"' in where

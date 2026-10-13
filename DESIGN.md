@@ -138,7 +138,7 @@ components:
 
 **Creative North Star: "The Kitchen Wall Year Planner"**
 
-The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets one answer first (a monumental verdict sentence), then the year drawn against the budget, then where the money went by length, then month-by-month detail, then the transactions behind every number.
+The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets one answer first (a monumental verdict sentence), then the year drawn against the budget, then each category against its own limit, then month-by-month detail, then the transactions behind every number.
 
 Density is high but calm. Figures are tabular everywhere so columns of Danish-formatted amounts align. Colour is almost absent until it means something: three marker colours carry state and nothing else. Headings and chart labels are set in a condensed grotesk in caps, the hand-lettered register of a wall planner; reading text is the system sans.
 
@@ -149,7 +149,7 @@ The document is one self-contained HTML file: inline CSS, inline SVG drawn serve
 - Ruled structure: 3px ink rules bound the page, 1.5px ink rules open sections and close totals, 1px hairlines separate rows.
 - Barlow Condensed (embedded as "Planner") in caps for headings, chart labels and headline figures; system sans for prose and tables.
 - No cards, no elevation shadows, no containers with fills.
-- Charts are planner drawings: a pace chart, ranked bars with a limit tick, a month grid filled like marker ink.
+- Charts are planner drawings: a pace chart, limit bars crossing one ruled limit line, a month grid filled like marker ink.
 - Self-contained: no script, no network, server-rendered SVG and CSS only.
 
 ## Colors
@@ -209,11 +209,11 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 
 A single column, max 1180px, centred, with 16px side padding and a 32px top margin. The masthead is a flex row (title left, window and last import right) closed by a 3px ink rule; the footer opens with the same rule, 72px below the last section. Sections are 64px apart, each opened by its title on a 1.5px ink rule and a Pencil Grey lede.
 
-Tables are grids of rules rather than boxes. The ranked list is a five-column grid (name, bar track, spent, limit and left, share) with 16px gaps and 11px row padding. The month grid is a fixed-layout table with a 196px name column and one column per window month, each separated by a 1px ink rule like planner columns; it keeps a 980px minimum width and scrolls horizontally inside its wrapper rather than squeezing.
+Tables are grids of rules rather than boxes. The ranked list is a five-column grid (name, bar track, % of limit, spent, limit and left) with 16px gaps and 11px row padding. The month grid is a fixed-layout table with a 196px name column and one column per window month, each separated by a 1px ink rule like planner columns; it keeps a 980px minimum width and scrolls horizontally inside its wrapper rather than squeezing.
 
 **Responsive (max-width 760px):**
 - Page top padding drops to 20px; sections to 48px apart; the lead to 17px.
-- Ranked rows collapse to two columns: name and spent on the first line, the bar track full-width beneath; limit, share and the column-head row are hidden.
+- Ranked rows collapse to two columns: name and % of limit on the first line, the bar track full-width beneath; spent, limit and the column-head row are hidden.
 - The pace chart keeps its drawing but hides all SVG text; a three-up figure row (Spent, Budget, Over / To spare) below the chart carries the numbers, with the over figure in red.
 - The month grid's name column narrows to 136px and wraps; the grid still scrolls sideways.
 - Transaction summaries drop the count to a second line; the fingerprint column is hidden and the table loses its indent.
@@ -243,8 +243,8 @@ Condensed caps title with 0.12em tracking on a 1.5px ink rule, followed by a Pen
 ### Pace chart (signature)
 Server-rendered SVG, 1000 by 300 user units, full width. Month columns ruled in ink with alternate columns shaded, labelled in caps above the plot; light horizontal gridlines with short axis labels (500k, 1 mio.). The budget accrues as a straight dashed ink line (1.5px, 6/5 dash) ending in an open circle; cumulative spending is a 4px stepped marker stroke in the year's state colour ending in a filled dot. A 2.5px ink "today" edge closes the plot. At the right edge, a bracket and label in red (OVER) or green (TO SPARE) state the gap, with SPENT and BUDGET values beside their line ends. With motion allowed, the stroke draws in over 1.4s (cubic-bezier(.16, 1, .3, 1)) and the dot appears after.
 
-### Ranked bars (signature)
-Categories sorted by spending, every bar on one shared scale so length compares. A dotted baseline marks the track; the fill is the state colour up to the limit, the 2px ink tick marks the yearly limit, and any spending beyond the limit continues past the tick as the red hatch. Right-hand columns give spent (with % of limit), limit (with left, or over in red), and share. A total row sits on a 1.5px ink rule. A key below spells out every mark.
+### Limit bars (signature)
+Each category measured against its own yearly limit, never against the total or the other categories: share of the total is deliberately not shown. Every track runs from 0 to 200% of that category's limit, so the limit sits at the same place on every row and is drawn as one continuous 2px ink line down the list, labelled LIMIT in the column head. Rows are sorted by % of limit, most over first. A dotted baseline marks the track; the fill is the state colour up to the limit, and spending beyond it continues past the line as the red hatch. Past 200% the hatch is cut off with a notched end. Right-hand columns give % of limit as a headline figure (red when over), spent, and limit (with left, or over in red). A total row sits on a 1.5px ink rule. A key below spells out every mark.
 
 ### Month grid (signature)
 The planner itself: categories down, months across, each cell filled from the bottom with a marker wash against that month's prorated share of the yearly limit (partial first and last months get a partial share). Fill height caps at full; green, amber or red wash by state, and an over-share cell gets a 3px red top edge. The amount sits top-right in small text; empty months stay blank. Alternate rows carry the column shade. A total row closes the grid on a 1.5px ink rule.
@@ -261,7 +261,7 @@ Native `details`/`summary` rows separated by hairlines: an ink chevron (rotates 
 - **Do** separate and group with rules: 3px ink for page bounds, 1.5px ink for section heads and totals, 1px hairlines for rows.
 - **Do** set headings, month names and chart labels in the embedded condensed face in caps, and prose and tables in the system sans with tabular figures.
 - **Do** draw charts as server-rendered inline SVG or CSS from computed figures, with a text equivalent (SVG `desc`, ARIA labels, the mobile figure row).
-- **Do** put compared quantities on one shared scale and mark the limit as an ink tick.
+- **Do** measure each category against its own limit, with the limit as one ink line at the same place on every row.
 - **Do** let wide grids scroll horizontally below 760px instead of shrinking them, and swap chart labels for a figure row when the chart gets too small to label.
 - **Do** gate motion behind `prefers-reduced-motion: no-preference`.
 
@@ -270,5 +270,5 @@ Native `details`/`summary` rows separated by hairlines: an ink chevron (rotates 
 - **Don't** use red, or its wash, for anything that is not overspending or a transaction needing review.
 - **Don't** set text in amber.
 - **Don't** add script, external URLs, remote fonts or linked images; the report is one self-contained file.
-- **Don't** use KPI tiles or donut charts; length on a shared scale answers "where did the money go".
+- **Don't** use KPI tiles or donut charts, and don't show a category's share of the total; what matters is whether it crossed its limit.
 - **Don't** show invented or sample figures; every number is computed from the data.
