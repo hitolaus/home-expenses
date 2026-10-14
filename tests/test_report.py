@@ -3,7 +3,8 @@ import datetime as dt
 from decimal import Decimal
 
 from budget.budget_calc import compute
-from budget.report import axis_label, bar_class, month_bars, month_grid, money, ranked_lines, render, slug
+from budget.report import (axis_label, bar_class, month_bars, month_grid, month_groups, money, ranked_lines,
+                           render, slug)
 from tests.test_budget_calc import st
 
 
@@ -200,5 +201,33 @@ def test_spending_per_month_defaults_to_the_total_and_has_no_separate_transactio
     spending = section(html, 'id="bars-h"')
     total = spending[spending.index('class="drill all"'):]
     assert ">2.100<" in total                                  # the total chart, shown without a selection
-    assert ".bars .drill:target ~ .drill.all { display: none; }" in html
+    assert ".bars .drill:is(:target, :has(:target)) ~ .drill.all { display: none; }" in html
     assert "Transactions by category" not in html
+
+
+def test_month_groups_split_a_category_by_window_month_newest_first(config):
+    config = at(config, "2026-01-31")  # window 01.02.2025 - 31.01.2026
+    b = compute([st("2025-03-01", "-400", "Groceries"), st("2025-03-20", "-100", "Groceries"),
+                 st("2025-04-02", "-50", "Groceries"), st("2025-03-05", "-999", "Housing")], config)
+    groups = month_groups(b, "Groceries")
+    assert [(g.key, g.label, g.spent, len(g.transactions)) for g in groups] == [
+        ("2025-04", "Apr 25", Decimal("50"), 1),
+        ("2025-03", "Mar 25", Decimal("500"), 2),           # Housing's March spending is not in it
+    ]
+    assert [t.date for t in groups[1].transactions] == [dt.date(2025, 3, 20), dt.date(2025, 3, 1)]
+    # shaded like the same month's column in the month bars: every second window month, from Mar
+    assert groups[1].shaded and not groups[0].shaded
+
+
+def test_category_month_bars_link_to_that_month_in_its_transactions(config):
+    config = at(config, "2026-01-31")
+    html = render(compute([st("2025-03-01", "-400", "Groceries"), st("2025-04-02", "-50", "Housing")], config),
+                  config, None)
+    spending = section(html, 'id="bars-h"')
+    panel = spending[spending.index('id="c-groceries"'):spending.index('id="c-housing"')]
+    assert 'href="#c-groceries-2025-03"' in panel and 'id="c-groceries-2025-03"' in panel
+    assert 'href="#c-groceries-2025-04"' not in panel          # no transactions that month: nothing to go to
+    total = spending[spending.index('class="drill all"'):]
+    assert "<a " not in total                                  # all categories: bars do nothing
+    # a month inside a panel keeps the panel open
+    assert ".bars .drill:target, .bars .drill:has(:target), .bars .drill.all { display: block; }" in html

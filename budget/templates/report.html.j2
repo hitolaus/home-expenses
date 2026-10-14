@@ -22,8 +22,8 @@
   ::selection { background: var(--select); color: var(--ink); }
   main { max-width: 1180px; margin: 0 auto; }
   a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-  {% for r in ranked %}main:has(#c-{{ r.slug }}:target) a[href="#c-{{ r.slug }}"]{{ ', ' if not loop.last }}{% endfor %} { text-decoration: underline; }
-  {% for r in ranked %}main:has(#c-{{ r.slug }}:target) a[href="#c-{{ r.slug }}"]::before{{ ', ' if not loop.last }}{% endfor %} { transform: translateY(-4px) rotate(45deg); }
+  {% for r in ranked %}main:has(#c-{{ r.slug }}:target, #c-{{ r.slug }} :target) a[href="#c-{{ r.slug }}"]{{ ', ' if not loop.last }}{% endfor %} { text-decoration: underline; }
+  {% for r in ranked %}main:has(#c-{{ r.slug }}:target, #c-{{ r.slug }} :target) a[href="#c-{{ r.slug }}"]::before{{ ', ' if not loop.last }}{% endfor %} { transform: translateY(-4px) rotate(45deg); }
   .drill-link:focus-visible { outline: 0; }
   .drill-link:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -1px; }
   a:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -62,9 +62,14 @@
   .bars .bar { shape-rendering: crispEdges; }
   .bars .share { stroke: var(--ink); stroke-width: 2; shape-rendering: crispEdges; }
   .bars .drill { display: none; }
-  .bars .drill:target, .bars .drill.all { display: block; }
+  .bars .drill:target, .bars .drill:has(:target), .bars .drill.all { display: block; }
   .bars .drill { scroll-margin-top: 56px; }
-  .bars .drill:target ~ .drill.all { display: none; }
+  .bars .drill:is(:target, :has(:target)) ~ .drill.all { display: none; }
+  .bars .hit { fill: transparent; }
+  .bars a:hover .hit { fill: var(--ink); fill-opacity: .05; }
+  .bars a:hover .month { text-decoration: underline; }
+  .bars a:focus-visible { outline: 0; }
+  .bars a:focus-visible .hit { stroke: var(--ink); stroke-width: 2; }
   .drill-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin-top: 18px; }
   .drill-head h3 { font: 700 22px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 0; }
   .drill-head p { margin: 0; color: var(--muted); }
@@ -74,6 +79,15 @@
               padding-bottom: 8px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; }
   .drill h4 span { color: var(--muted); font-weight: 500; letter-spacing: .04em; }
   .drill .tx { margin: 0; width: 100%; }
+  /* One band per month, shaded like that month's column in the bars above; a heavier rule opens each month */
+  .tx tbody.in-month { scroll-margin-top: 24px; }
+  .tx tbody.in-month.shaded td { background: var(--column); }
+  .tx tbody.in-month td:first-child { padding-left: 10px; }
+  .tx tr.month-head td { border-top: 1.5px solid var(--ink); border-bottom-color: var(--hair); padding-top: 9px; padding-bottom: 7px; }
+  .tx tbody.in-month:first-of-type tr.month-head td { border-top: 0; }
+  .tx tbody.in-month:target tr.month-head td { border-top: 3px solid var(--ink); }
+  .tx tr.month-head .label { font: 700 13px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; }
+  .tx tr.month-head .meta { color: var(--muted); font-size: 12.5px; margin-left: 10px; }
   .fill-green { fill: var(--green); } .fill-amber { fill: var(--amber); } .fill-red { fill: var(--red); }
 
   /* Where the money went: each category against its own limit; the limit is one ruled line down the list */
@@ -265,8 +279,28 @@
 </table>
 {% endmacro %}
 
-{% macro month_chart(bars, uid) %}
-  <div class="scroll"><svg viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="img" aria-labelledby="{{ uid }}-h {{ uid }}-desc">
+{% macro month_table(groups, uid) %}
+<table class="tx">
+  <thead><tr><th>Date</th><th>Description</th><th class="num">Amount</th><th class="fp-col">Fingerprint</th></tr></thead>
+  {% for g in groups %}
+  <tbody class="in-month{{ ' shaded' if g.shaded }}" id="{{ uid }}-{{ g.key }}">
+  <tr class="month-head"><td colspan="4"><span class="label">{{ g.label }}</span><span class="meta">{{ g.transactions|length }} · {{ g.spent|money }} {{ currency }}</span></td></tr>
+  {% for t in g.transactions %}
+  <tr>
+    <td class="date">{{ t.date.strftime('%d.%m.%Y') }}</td>
+    <td class="desc">{{ t.description }}</td>
+    <td class="num">{{ t.amount|money(2) }}</td>
+    <td class="fp-col"><code>{{ t.fingerprint[:fp_len] }}</code></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+  {% endfor %}
+</table>
+{% endmacro %}
+
+{# With `link`, each month with transactions links to them; the total chart passes none, so its bars do nothing. #}
+{% macro month_chart(bars, uid, link=none, linked=()) %}
+  <div class="scroll"><svg viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="{{ 'group' if link else 'img' }}" aria-labelledby="{{ uid }}-h {{ uid }}-desc">
     <desc id="{{ uid }}-desc">{% for m in bars.bars %}{{ m.label }}{% if m.days %} (days {{ m.days }}){% endif %}: {{ m.spent|money }} of {{ m.allowance|money }} {{ currency }}. {% endfor %}</desc>
     {% for m in bars.bars %}{% if loop.index is even %}<rect class="col" x="{{ m.x }}" y="{{ chart.top }}" width="{{ m.w }}" height="{{ bars.baseline - chart.top }}"/>{% endif %}{% endfor %}
     {% for y, v in bars.y_ticks %}
@@ -275,6 +309,9 @@
     {% endfor %}
     {% for m in bars.bars %}
     {% set bw = (m.w * 0.56)|round(1) %}{% set bx = (m.x + (m.w - bw) / 2)|round(1) %}{% set cx = m.x + m.w / 2 %}
+    {% set go = link and m.key in linked %}
+    {% if go %}<a href="#{{ link }}-{{ m.key }}" aria-label="{{ m.label }}: {{ m.spent|money }} {{ currency }}, show its transactions">
+    <rect class="hit" x="{{ m.x }}" y="{{ chart.top - 26 }}" width="{{ m.w }}" height="{{ bars.baseline - chart.top + 26 }}"/>{% endif %}
     <line class="month-rule" x1="{{ m.x }}" x2="{{ m.x }}" y1="{{ chart.top - 26 }}" y2="{{ bars.baseline }}"/>
     <text class="month" x="{{ cx }}" y="{{ chart.top - 11 }}" text-anchor="middle">{{ m.label }}</text>
     {% if m.days %}<text x="{{ cx }}" y="{{ bars.baseline + 20 }}" text-anchor="middle">days {{ m.days }}</text>{% endif %}
@@ -287,6 +324,7 @@
     </g>
     <line class="share" x1="{{ bx - 7 }}" x2="{{ bx + bw + 7 }}" y1="{{ m.share_y }}" y2="{{ m.share_y }}"/>
     {% if m.spent > 0 %}<text class="amount{{ ' fill-red' if m.state == 'red' }}" x="{{ cx }}" y="{{ ([m.bar_top, m.share_y]|min - 8)|round(1) }}" text-anchor="middle">{{ m.spent|money }}</text>{% endif %}
+    {% if go %}</a>{% endif %}
     {% endfor %}
     <line class="month-rule" x1="{{ chart.right }}" x2="{{ chart.right }}" y1="{{ chart.top - 26 }}" y2="{{ bars.baseline }}"/>
     <line class="axis" x1="{{ chart.left }}" x2="{{ chart.right }}" y1="{{ bars.baseline }}" y2="{{ bars.baseline }}"/>
@@ -296,17 +334,17 @@
 <section class="bars" id="spending" aria-labelledby="bars-h">
   <h2 id="bars-h">Spending per month</h2>
   {% for r in ranked %}
-  {% set txs = transactions[r.name] %}
+  {% set txs = transactions[r.name] %}{% set gs = groups[r.name] %}
   <div class="drill" id="c-{{ r.slug }}">
     <div class="drill-head">
       <h3 id="c-{{ r.slug }}-h">{{ r.name }}</h3>
       <p>{{ r.month_limit|money }} {{ currency }} per month{% if r.used_pct is not none %} · {{ '%.0f'|format(r.used_pct) }}% of the yearly limit{% endif %}</p>
       <a href="#spending">Back to all categories</a>
     </div>
-    <p class="lede">{{ r.name }}, month by month. The black line across each column is that month's share of its {{ r.limit|money }} {{ currency }} yearly limit; spending above it is over.</p>
-    {{ month_chart(category_bars[r.name], 'c-' ~ r.slug) }}
+    <p class="lede">{{ r.name }}, month by month. The black line across each column is that month's share of its {{ r.limit|money }} {{ currency }} yearly limit; spending above it is over.{% if gs %} Click a month to see its transactions.{% endif %}</p>
+    {{ month_chart(category_bars[r.name], 'c-' ~ r.slug, 'c-' ~ r.slug, gs|map(attribute='key')|list) }}
     <h4>Transactions <span>{{ txs|length }} · {{ r.spent|money }} {{ currency }}</span></h4>
-    {% if txs %}<div class="scroll">{{ tx_table(txs) }}</div>{% else %}<p class="empty">No transactions in the window.</p>{% endif %}
+    {% if txs %}<div class="scroll">{{ month_table(gs, 'c-' ~ r.slug) }}</div>{% else %}<p class="empty">No transactions in the window.</p>{% endif %}
   </div>
   {% endfor %}
   <div class="drill all" id="all">

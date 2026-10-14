@@ -71,6 +71,7 @@ def axis_label(value: Decimal) -> str:
 
 @dataclass
 class MonthBar:
+    key: str           # "2025-03", the fragment of that month's transactions in a category panel
     label: str
     days: str | None   # day range of a partial month, e.g. "13-31"
     spent: Decimal
@@ -116,6 +117,7 @@ def month_bars(budget: Budget, category: str | None = None) -> MonthBars:
         partial = start.day != 1 or stop != next_month - dt.timedelta(days=1)
         bar_top, share_y = y(c.spent), y(c.allowance)
         bars.append(MonthBar(
+            key=f"{start.year}-{start.month:02d}",
             label=f"{MONTH_NAMES[start.month - 1]} {start.year % 100:02d}",
             days=f"{start.day}-{stop.day}" if partial else None,
             spent=c.spent, allowance=c.allowance, state=c.state or "green",
@@ -128,6 +130,28 @@ def month_bars(budget: Budget, category: str | None = None) -> MonthBars:
         ticks.append((y(v), axis_label(Decimal(str(v)))))
         v += step
     return MonthBars(bars, ticks, baseline)
+
+
+@dataclass
+class MonthGroup:
+    key: str        # "2025-03"
+    label: str      # "Mar 25"
+    shaded: bool    # shaded like the same month's column in the month bars
+    spent: Decimal
+    transactions: list
+
+
+def month_groups(budget: Budget, category: str) -> list[MonthGroup]:
+    """A category's transactions by window month, newest month and transaction first."""
+    line = next(ln for ln in budget.lines if ln.name == category)
+    groups = []
+    for i, (yr, mo) in enumerate(budget.months):
+        txs = sorted((t for t in line.transactions if (t.date.year, t.date.month) == (yr, mo)),
+                     key=lambda t: t.date, reverse=True)
+        if txs:
+            groups.append(MonthGroup(f"{yr}-{mo:02d}", f"{MONTH_NAMES[mo - 1]} {yr % 100:02d}", i % 2 == 1,
+                                     budget.monthly[category][i], txs))
+    return groups[::-1]
 
 
 def slug(name: str) -> str:
@@ -217,6 +241,7 @@ def render(budget: Budget, config: Config, last_import: str | None) -> str:
         bars=month_bars(budget),
         category_bars={ln.name: month_bars(budget, ln.name) for ln in budget.lines},
         transactions={ln.name: ln.transactions for ln in budget.lines},
+        groups={ln.name: month_groups(budget, ln.name) for ln in budget.lines},
         chart=dict(w=CHART_W, h=CHART_H, left=CHART_LEFT, right=CHART_W - CHART_RIGHT, top=CHART_TOP),
         ranked=ranked_lines(budget),
         rank_scale=RANK_SCALE,
