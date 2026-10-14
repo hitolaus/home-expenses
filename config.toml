@@ -13,8 +13,13 @@ yearly_limit = 120000
 
 [[category]]
 name = "Housing"
-description = "Rent, mortgage, utilities, home insurance, repairs"
-yearly_limit = 300000
+description = "Rent, mortgage, utilities, repairs"
+yearly_limit = 250000
+
+[[category]]
+name = "Insurance"
+description = "Home insurance, A-kasse, union"
+yearly_limit = 30000
 
 [[category]]
 name = "Transport"
@@ -24,17 +29,17 @@ yearly_limit = 90000
 [[category]]
 name = "Restaurants & takeaway"
 description = "Restaurants, cafés, bars, food delivery (Wolt, Just Eat)"
-yearly_limit = 12000
+yearly_limit = 20000
 
 [[category]]
 name = "Shopping & clothes"
 description = "Clothes, department stores, electronics, home goods, gifts"
-yearly_limit = 36000
+yearly_limit = 100000
 
 [[category]]
 name = "Subscriptions"
 description = "Streaming, phone, internet, software and app subscriptions, memberships"
-yearly_limit = 50000
+yearly_limit = 24000
 
 [[category]]
 name = "Leisure"
@@ -44,22 +49,22 @@ yearly_limit = 30000
 [[category]]
 name = "Vacation"
 description = "Everything for vacations: flights, hotels, holiday homes, rental cars, travel agencies, and purchases made abroad while travelling"
-yearly_limit = 50000
+yearly_limit = 100000
 
 [[category]]
 name = "Health"
 description = "Pharmacy, doctor, dentist, health insurance, medicine"
-yearly_limit = 15000
+yearly_limit = 50000
 
 [[category]]
 name = "Children"
 description = "Childcare, toys, children's clothes and activities, savings for children"
-yearly_limit = 30000
+yearly_limit = 50000
 
 [[category]]
 name = "Miscellaneous"
 description = "Anything that does not fit another category, bank fees"
-yearly_limit = 15000
+yearly_limit = 12000
 
 [[category]]
 name = "Income"
