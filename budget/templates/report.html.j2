@@ -22,6 +22,10 @@
   ::selection { background: var(--select); color: var(--ink); }
   main { max-width: 1180px; margin: 0 auto; }
   a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  {% for r in ranked %}main:has(#c-{{ r.slug }}:target) a[href="#c-{{ r.slug }}"]{{ ', ' if not loop.last }}{% endfor %} { text-decoration: underline; }
+  {% for r in ranked %}main:has(#c-{{ r.slug }}:target) a[href="#c-{{ r.slug }}"]::before{{ ', ' if not loop.last }}{% endfor %} { transform: translateY(-4px) rotate(45deg); }
+  .drill-link:focus-visible { outline: 0; }
+  .drill-link:focus-visible::after { outline: 2px solid var(--ink); outline-offset: -1px; }
   a:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   code { font: 12.5px/1 ui-monospace, "SF Mono", Menlo, monospace; color: var(--muted); user-select: all; }
@@ -45,33 +49,32 @@
                  margin: 0 0 6px; padding-bottom: 9px; border-bottom: 1.5px solid var(--ink); }
   .lede { color: var(--muted); margin: 12px 0 18px; max-width: 75ch; }
 
-  /* Pace chart */
-  .pace svg { display: block; width: 100%; height: auto; overflow: visible; }
-  .pace-figures { display: none; }
-  .pace .col { fill: var(--column); }
-  .pace .month-rule { stroke: var(--ink); stroke-width: 1; }
-  .pace .today { stroke: var(--ink); stroke-width: 2.5; }
-  .pace .today-label { font: 700 13px var(--display); fill: var(--ink); letter-spacing: .08em; }
-  .pace .bracket { fill: none; stroke-width: 1.5; }
-  .pace .gap-label { font: 700 15px var(--display); letter-spacing: .02em; }
-  .pace .gap-value { font: 700 22px var(--display); }
-  .pace text.fill-red { fill: var(--red); } .pace text.fill-green { fill: var(--green); }
-  .pace .grid { stroke: var(--hair); stroke-width: 1; }
-  .pace .axis { stroke: var(--ink); stroke-width: 1.5; }
-  .pace text { font: 500 13px var(--display); fill: var(--muted); letter-spacing: .04em; }
-  .pace .month { text-transform: uppercase; fill: var(--ink); }
-  .pace .budget { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 6 5; fill: none; }
-  .pace .spent { fill: none; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
-  .pace .end-label { font: 700 15px var(--display); fill: var(--ink); letter-spacing: .02em; }
-  .pace .end-value { font: 500 22px var(--display); fill: var(--ink); letter-spacing: 0; }
-  .stroke-green { stroke: var(--green); } .stroke-amber { stroke: var(--amber); } .stroke-red { stroke: var(--red); }
+  /* Spending per month: one bar per planner column, against the month's share of the budget */
+  .bars svg { display: block; width: 100%; min-width: 720px; height: auto; }
+  .bars .col { fill: var(--column); }
+  .bars .month-rule { stroke: var(--ink); stroke-width: 1; }
+  .bars .grid { stroke: var(--hair); stroke-width: 1; }
+  .bars .axis { stroke: var(--ink); stroke-width: 1.5; }
+  .bars text { font: 500 13px var(--display); fill: var(--muted); letter-spacing: .04em; }
+  .bars .month { font-weight: 700; fill: var(--ink); letter-spacing: .08em; text-transform: uppercase; }
+  .bars .amount { font-size: 15px; fill: var(--ink); letter-spacing: 0; }
+  .bars .amount.fill-red { fill: var(--red); }
+  .bars .bar { shape-rendering: crispEdges; }
+  .bars .share { stroke: var(--ink); stroke-width: 2; shape-rendering: crispEdges; }
+  .bars .drill { display: none; }
+  .bars .drill:target, .bars .drill.all { display: block; }
+  .bars .drill { scroll-margin-top: 56px; }
+  .bars .drill:target ~ .drill.all { display: none; }
+  .drill-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin-top: 18px; }
+  .drill-head h3 { font: 700 22px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 0; }
+  .drill-head p { margin: 0; color: var(--muted); }
+  .drill-head a { margin-left: auto; font-size: 13.5px; }
+  .drill .lede { margin-top: 8px; }
+  .drill h4 { font: 700 13px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; margin: 36px 0 0;
+              padding-bottom: 8px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; }
+  .drill h4 span { color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+  .drill .tx { margin: 0; width: 100%; }
   .fill-green { fill: var(--green); } .fill-amber { fill: var(--amber); } .fill-red { fill: var(--red); }
-  @media (prefers-reduced-motion: no-preference) {
-    .pace .spent { stroke-dasharray: 4000; stroke-dashoffset: 4000; animation: draw 1.4s cubic-bezier(.16, 1, .3, 1) .15s forwards; }
-    .pace .dot { opacity: 0; animation: appear .3s ease-out 1.3s forwards; }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes appear { to { opacity: 1; } }
-  }
 
   /* Where the money went: each category against its own limit; the limit is one ruled line down the list */
   .ranked { margin: 0; }
@@ -80,6 +83,14 @@
   .rank-row.head { padding: 6px 0; border-bottom-color: var(--rule); color: var(--muted); font-size: 12.5px; }
   .rank-row.total { border-top: 1.5px solid var(--ink); border-bottom: 0; font-weight: 650; }
   .rank-row .name { font-weight: 600; }
+  .rank-row:has(.drill-link) { position: relative; }
+  .drill-link { text-decoration: none; display: inline-flex; align-items: baseline; gap: 10px; }
+  .drill-link::before { content: ""; flex: none; width: 7px; height: 7px; border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink);
+                        transform: translateY(-2px) rotate(-45deg); transition: transform .2s cubic-bezier(.16, 1, .3, 1); }
+  .drill-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+  .drill-link:hover { text-decoration: underline; }
+  .drill-link:hover::before { transform: translate(2px, -2px) rotate(-45deg); }
+  .rank-row.head .name-head { padding-left: 17px; }
   .rank-row .num { text-align: right; white-space: nowrap; }
   .rank-row .num small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
   .rank-row .used { font: 500 22px/1 var(--display); }
@@ -163,22 +174,20 @@
     .rank-row .track { grid-column: 1 / -1; grid-row: 2; margin: 0; height: 22px; }
     .rank-row .spent, .rank-row .limit-col { display: none; }
     .rank-row.head { display: none; }
+    .drill-head a { margin-left: 0; flex-basis: 100%; }
     summary { grid-template-columns: 18px 1fr auto; }
     summary .count { grid-column: 2; grid-row: 2; }
     .tx { margin-left: 0; width: 100%; }
     .tx .fp-col { display: none; }
-    .pace svg { margin-right: -12px; }
-    .pace svg text { display: none; }
-    .pace-figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0 0; border-top: 1px solid var(--rule); padding-top: 10px; }
-    .pace-figures dt { font: 700 12px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-    .pace-figures dd { margin: 2px 0 0; font: 500 22px var(--display); }
-    .pace-figures .neg dt, .pace-figures .neg dd { color: var(--red); }
     .planner th:first-child, .planner td:first-child { width: 136px; }
     .planner tbody td:first-child { font-size: 13px; white-space: normal; line-height: 1.2; }
   }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><defs><pattern id="over-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <rect width="6" height="6" fill="var(--red-tint)"/><rect width="3" height="6" fill="var(--red)"/>
+</pattern></defs></svg>
 <main>
 
 <header class="masthead">
@@ -196,10 +205,10 @@
 
 <section aria-labelledby="where-h">
   <h2 id="where-h">Where the money went</h2>
-  <p class="lede">Each category against its own yearly limit. The black line is the limit: a bar that crosses it is over. Most over the limit first.</p>
+  <p class="lede">Each category against its own yearly limit. The black line is the limit: a bar that crosses it is over. Most over the limit first. Pick a category to see its months and transactions.</p>
   <div class="ranked" role="table" aria-label="Spending by category against each category's limit">
     <div class="rank-row head" role="row">
-      <span role="columnheader">Category</span>
+      <span class="name-head" role="columnheader">Category</span>
       <div class="track" role="columnheader"><span class="mark">0</span><span class="mark at-limit" style="left: {{ ranked[0].limit_pct if ranked else 50 }}%">Limit</span><span class="mark at-end">{{ rank_scale }}%</span>{% if ranked %}<span class="limit" style="left: {{ ranked[0].limit_pct }}%"></span>{% endif %}</div>
       <span class="num" role="columnheader">Of limit</span>
       <span class="num" role="columnheader">Per month</span>
@@ -208,7 +217,7 @@
     {% for r in ranked %}
     {% set used = '%.0f'|format(r.used_pct) ~ '%' if r.used_pct is not none else '–' %}
     <div class="rank-row" role="row">
-      <span class="name" role="cell">{{ r.name }}</span>
+      <span class="name" role="cell"><a class="drill-link" href="#c-{{ r.slug }}">{{ r.name }}</a></span>
       <div class="track" role="cell" aria-label="{{ used }} of limit">
         <span class="fill bg-{{ r.state or 'green' }}" style="width: {{ [r.bar_pct, r.limit_pct]|min|round(2) }}%"></span>
         {% if r.bar_pct > r.limit_pct %}<span class="over{{ ' capped' if r.capped }}" style="left: {{ r.limit_pct|round(2) }}%; width: {{ (r.bar_pct - r.limit_pct)|round(2) }}%"></span>{% endif %}
@@ -221,7 +230,7 @@
     </div>
     {% endfor %}
     <div class="rank-row total" role="row">
-      <span class="name" role="cell">Total</span><span role="cell"></span>
+      <span class="name" role="cell"><a class="drill-link" href="#spending">Total</a></span><span role="cell"></span>
       <span class="num used{{ ' neg' if b.total_remaining < 0 }}" role="cell">{{ '%.0f'|format(b.total_used_pct) ~ '%' if b.total_used_pct is not none else '–' }}</span>
       <span class="num month-limit" role="cell">{{ (b.total_limit / 12)|money }}<small class="sr"> per month</small></span>
       <span class="num spent" role="cell">{{ b.total_spent|money }}</span>
@@ -239,50 +248,80 @@
   </div>
 </section>
 
-<section class="pace" aria-labelledby="pace-h">
-  <h2 id="pace-h">The year against the budget</h2>
-  <p class="lede">Total spending added up day by day, compared with the budget spread evenly across the year (dashed line).</p>
-  {% set state = b.total_used_pct|bar_class or 'green' %}
-  {% set top, bot = [pace.spent_end[1], pace.budget_end[1]]|min, [pace.spent_end[1], pace.budget_end[1]]|max %}
-  {% set mid = (top + bot) / 2 %}
-  {% set mid = [mid, chart.top + 46]|max %}
-  {% set top_l, bot_l = [top, mid - 50]|min, [bot, mid + 50]|max %}
-  {% set sy, by = (top_l, bot_l) if pace.spent_end[1] <= pace.budget_end[1] else (bot_l, top_l) %}
-  {% set gap = pace.spent - pace.limit %}
-  <div class="scroll"><svg viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="img" aria-labelledby="pace-h pace-desc">
-    <desc id="pace-desc">Cumulative spending reached {{ pace.spent|money }} {{ currency }} against a budget of {{ pace.limit|money }} {{ currency }}.</desc>
-    {% for x, w, label in pace.months %}
-      {% if loop.index is even %}<rect class="col" x="{{ x }}" y="{{ chart.top }}" width="{{ w }}" height="{{ chart.bottom - chart.top }}"/>{% endif %}
-    {% endfor %}
-    {% for y, v in pace.y_ticks %}
-      <line class="grid" x1="{{ chart.left }}" x2="{{ pace.budget_end[0] }}" y1="{{ y }}" y2="{{ y }}"/>
+{% macro tx_table(txs, show_category=false) %}
+<table class="tx">
+  <thead><tr><th>Date</th><th>Description</th><th class="num">Amount</th>{% if show_category %}<th>Category</th><th class="num">Confidence</th>{% endif %}<th class="fp-col">Fingerprint</th></tr></thead>
+  <tbody>
+  {% for t in txs|sort(attribute='date', reverse=true) %}
+  <tr>
+    <td class="date">{{ t.date.strftime('%d.%m.%Y') }}</td>
+    <td class="desc">{{ t.description }}</td>
+    <td class="num">{{ t.amount|money(2) }}</td>
+    {% if show_category %}<td>{{ t.category or 'Uncategorized' }}</td><td class="num low">{{ '%.2f'|format(t.confidence) if t.confidence is not none else '' }}</td>{% endif %}
+    <td class="fp-col"><code>{{ t.fingerprint[:fp_len] }}</code></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+{% macro month_chart(bars, uid) %}
+  <div class="scroll"><svg viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="img" aria-labelledby="{{ uid }}-h {{ uid }}-desc">
+    <desc id="{{ uid }}-desc">{% for m in bars.bars %}{{ m.label }}{% if m.days %} (days {{ m.days }}){% endif %}: {{ m.spent|money }} of {{ m.allowance|money }} {{ currency }}. {% endfor %}</desc>
+    {% for m in bars.bars %}{% if loop.index is even %}<rect class="col" x="{{ m.x }}" y="{{ chart.top }}" width="{{ m.w }}" height="{{ bars.baseline - chart.top }}"/>{% endif %}{% endfor %}
+    {% for y, v in bars.y_ticks %}
+      {% if not loop.first %}<line class="grid" x1="{{ chart.left }}" x2="{{ chart.right }}" y1="{{ y }}" y2="{{ y }}"/>{% endif %}
       <text x="{{ chart.left - 10 }}" y="{{ y + 4 }}" text-anchor="end">{{ v }}</text>
     {% endfor %}
-    {% for x, w, label in pace.months %}
-      <line class="month-rule" x1="{{ x }}" x2="{{ x }}" y1="{{ chart.top - 22 }}" y2="{{ chart.bottom }}"/>
-      {% if w > 14 %}<text class="month" x="{{ x + w / 2 }}" y="{{ chart.top - 9 }}" text-anchor="middle">{{ label }}</text>{% endif %}
+    {% for m in bars.bars %}
+    {% set bw = (m.w * 0.56)|round(1) %}{% set bx = (m.x + (m.w - bw) / 2)|round(1) %}{% set cx = m.x + m.w / 2 %}
+    <line class="month-rule" x1="{{ m.x }}" x2="{{ m.x }}" y1="{{ chart.top - 26 }}" y2="{{ bars.baseline }}"/>
+    <text class="month" x="{{ cx }}" y="{{ chart.top - 11 }}" text-anchor="middle">{{ m.label }}</text>
+    {% if m.days %}<text x="{{ cx }}" y="{{ bars.baseline + 20 }}" text-anchor="middle">days {{ m.days }}</text>{% endif %}
+    <g>
+      {% if m.spent > 0 %}
+      <rect class="bar fill-{{ m.state }}" x="{{ bx }}" y="{{ m.over_y }}" width="{{ bw }}" height="{{ (bars.baseline - m.over_y)|round(1) }}"/>
+      {% if m.over_y > m.bar_top %}<rect class="bar" fill="url(#over-hatch)" x="{{ bx }}" y="{{ m.bar_top }}" width="{{ bw }}" height="{{ (m.over_y - m.bar_top)|round(1) }}"/>{% endif %}
+      {% endif %}
+      <title>{{ m.label }}: {{ m.spent|money }} of {{ m.allowance|money }} {{ currency }}</title>
+    </g>
+    <line class="share" x1="{{ bx - 7 }}" x2="{{ bx + bw + 7 }}" y1="{{ m.share_y }}" y2="{{ m.share_y }}"/>
+    {% if m.spent > 0 %}<text class="amount{{ ' fill-red' if m.state == 'red' }}" x="{{ cx }}" y="{{ ([m.bar_top, m.share_y]|min - 8)|round(1) }}" text-anchor="middle">{{ m.spent|money }}</text>{% endif %}
     {% endfor %}
-    <line class="today" x1="{{ pace.budget_end[0] }}" x2="{{ pace.budget_end[0] }}" y1="{{ chart.top - 22 }}" y2="{{ chart.bottom + 6 }}"/>
-    <text class="today-label" x="{{ pace.budget_end[0] }}" y="{{ chart.bottom + 22 }}" text-anchor="end">TODAY {{ b.window.end.strftime('%d.%m') }}</text>
-    <line class="axis" x1="{{ chart.left }}" x2="{{ pace.budget_end[0] }}" y1="{{ chart.bottom }}" y2="{{ chart.bottom }}"/>
-    <line class="budget" x1="{{ pace.budget_line[0] }}" y1="{{ pace.budget_line[1] }}" x2="{{ pace.budget_line[2] }}" y2="{{ pace.budget_line[3] }}"/>
-    <polyline class="spent stroke-{{ state }}" points="{{ pace.spent_points }}"/>
-    <circle class="dot fill-{{ state }}" cx="{{ pace.spent_end[0] }}" cy="{{ pace.spent_end[1] }}" r="6"/>
-    <circle cx="{{ pace.budget_end[0] }}" cy="{{ pace.budget_end[1] }}" r="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
-    {% set bx = pace.budget_end[0] + 12 %}
-    <path class="bracket stroke-{{ 'red' if gap > 0 else 'green' }}" d="M{{ bx - 4 }},{{ top }} H{{ bx }} V{{ bot }} H{{ bx - 4 }}"/>
-    <text class="gap-label fill-{{ 'red' if gap > 0 else 'green' }}" x="{{ bx + 12 }}" y="{{ mid - 6 }}">{{ 'OVER' if gap > 0 else 'TO SPARE' }}</text>
-    <text class="gap-value fill-{{ 'red' if gap > 0 else 'green' }}" x="{{ bx + 12 }}" y="{{ mid + 16 }}">{{ gap|abs|money }}</text>
-    <text class="end-label" x="{{ pace.budget_end[0] + 24 }}" y="{{ sy - 6 }}">SPENT</text>
-    <text class="end-value" x="{{ pace.budget_end[0] + 24 }}" y="{{ sy + 16 }}">{{ pace.spent|money }}</text>
-    <text class="end-label" x="{{ pace.budget_end[0] + 24 }}" y="{{ by - 6 }}">BUDGET</text>
-    <text class="end-value" x="{{ pace.budget_end[0] + 24 }}" y="{{ by + 16 }}">{{ pace.limit|money }}</text>
+    <line class="month-rule" x1="{{ chart.right }}" x2="{{ chart.right }}" y1="{{ chart.top - 26 }}" y2="{{ bars.baseline }}"/>
+    <line class="axis" x1="{{ chart.left }}" x2="{{ chart.right }}" y1="{{ bars.baseline }}" y2="{{ bars.baseline }}"/>
   </svg></div>
-  <dl class="pace-figures">
-    <div><dt>Spent</dt><dd>{{ pace.spent|money }}</dd></div>
-    <div><dt>Budget</dt><dd>{{ pace.limit|money }}</dd></div>
-    <div class="{{ 'neg' if gap > 0 }}"><dt>{{ 'Over' if gap > 0 else 'To spare' }}</dt><dd>{{ gap|abs|money }}</dd></div>
-  </dl>
+{% endmacro %}
+
+<section class="bars" id="spending" aria-labelledby="bars-h">
+  <h2 id="bars-h">Spending per month</h2>
+  {% for r in ranked %}
+  {% set txs = transactions[r.name] %}
+  <div class="drill" id="c-{{ r.slug }}">
+    <div class="drill-head">
+      <h3 id="c-{{ r.slug }}-h">{{ r.name }}</h3>
+      <p>{{ r.month_limit|money }} {{ currency }} per month{% if r.used_pct is not none %} · {{ '%.0f'|format(r.used_pct) }}% of the yearly limit{% endif %}</p>
+      <a href="#spending">Back to all categories</a>
+    </div>
+    <p class="lede">{{ r.name }}, month by month. The black line across each column is that month's share of its {{ r.limit|money }} {{ currency }} yearly limit; spending above it is over.</p>
+    {{ month_chart(category_bars[r.name], 'c-' ~ r.slug) }}
+    <h4>Transactions <span>{{ txs|length }} · {{ r.spent|money }} {{ currency }}</span></h4>
+    {% if txs %}<div class="scroll">{{ tx_table(txs) }}</div>{% else %}<p class="empty">No transactions in the window.</p>{% endif %}
+  </div>
+  {% endfor %}
+  <div class="drill all" id="all">
+    <div class="drill-head"><h3 id="all-h">All categories</h3><p>{{ (b.total_limit / 12)|money }} {{ currency }} per month</p></div>
+    <p class="lede">Everything spent in budgeted categories, month by month. The black line across each column is that month's share of the yearly budget; spending above it is over.</p>
+    {{ month_chart(bars, 'all') }}
+  </div>
+  <div class="scale-note">
+    <span class="key"><i class="bg-green"></i>Under 75% of the month's share</span>
+    <span class="key"><i class="bg-amber"></i>75–100%</span>
+    <span class="key"><i class="bg-red"></i>Over the month's share</span>
+    <span class="key"><i class="hatch"></i>Spending above the share</span>
+    <span class="key"><i class="tick"></i>The month's share of the yearly budget</span>
+    <span>Partial first and last months get a partial share.</span>
+  </div>
 </section>
 
 <section aria-labelledby="months-h">
@@ -313,32 +352,6 @@
   </div>
 </section>
 
-{% macro tx_table(txs, show_category=false) %}
-<table class="tx">
-  <thead><tr><th>Date</th><th>Description</th><th class="num">Amount</th>{% if show_category %}<th>Category</th><th class="num">Confidence</th>{% endif %}<th class="fp-col">Fingerprint</th></tr></thead>
-  <tbody>
-  {% for t in txs|sort(attribute='date', reverse=true) %}
-  <tr>
-    <td class="date">{{ t.date.strftime('%d.%m.%Y') }}</td>
-    <td class="desc">{{ t.description }}</td>
-    <td class="num">{{ t.amount|money(2) }}</td>
-    {% if show_category %}<td>{{ t.category or 'Uncategorized' }}</td><td class="num low">{{ '%.2f'|format(t.confidence) if t.confidence is not none else '' }}</td>{% endif %}
-    <td class="fp-col"><code>{{ t.fingerprint[:fp_len] }}</code></td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-{% endmacro %}
-
-<section aria-labelledby="tx-h">
-  <h2 id="tx-h">Transactions by category</h2>
-  {% for ln in b.lines %}
-  <details>
-    <summary><span class="cat">{{ ln.name }}</span><span class="count">{{ ln.transactions|length }} transactions</span><span class="amount">{{ ln.spent|money }} {{ currency }}</span></summary>
-    <div class="scroll">{{ tx_table(ln.transactions) }}</div>
-  </details>
-  {% endfor %}
-</section>
 
 <section aria-labelledby="outside-h">
   <h2 id="outside-h">Outside the budget</h2>

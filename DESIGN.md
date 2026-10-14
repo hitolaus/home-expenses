@@ -128,7 +128,7 @@ components:
 
 **Creative North Star: "The Kitchen Wall Year Planner"**
 
-The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets the most important answer first: each category against its own limit, with its monthly budget. Then the year drawn against the budget, then month-by-month detail, then the transactions behind every number. There is no verdict headline; the ranked list's total row carries the overall figure.
+The report is a paper year planner pinned to the kitchen wall: white planner paper, near-black ink rules, a heavier rule at every month, and each category marked in with a marker pen up to what was spent. Structure comes from ruled lines and columns, never from boxes. The reader gets the most important answer first: each category against its own limit, with its monthly budget. Then one bar per month against that month's share of the budget, so the expensive months stand out, then month-by-month detail per category. Every category in the ranked list drills down: its name is a link that swaps the month bars to that category and shows its transactions beneath them. There is no verdict headline; the ranked list's total row carries the overall figure.
 
 Density is high but calm. Figures are tabular everywhere so columns of Danish-formatted amounts align. Colour is almost absent until it means something: three marker colours carry state and nothing else. Headings and chart labels are set in a condensed grotesk in caps, the hand-lettered register of a wall planner; reading text is the system sans.
 
@@ -139,7 +139,7 @@ The document is one self-contained HTML file: inline CSS, inline SVG drawn serve
 - Ruled structure: 3px ink rules bound the page, 1.5px ink rules open sections and close totals, 1px hairlines separate rows.
 - Barlow Condensed (embedded as "Planner") in caps for headings, chart labels and headline figures; system sans for prose and tables.
 - No cards, no elevation shadows, no containers with fills.
-- Charts are planner drawings: a pace chart, limit bars crossing one ruled limit line, a month grid filled like marker ink.
+- Charts are planner drawings: month bars against a ruled share line, limit bars crossing one ruled limit line, a month grid filled like marker ink.
 - Self-contained: no script, no network, server-rendered SVG and CSS only.
 
 ## Colors
@@ -150,8 +150,8 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 - **Planner Ink** (`ink`): all text, month rules, the today edge, axes, the limit tick, section and total rules, focus outlines. It is the line work of the planner.
 
 ### Secondary (state markers)
-- **Marker Green** (`green`): under 75% of a limit. Bar fills, the pace stroke when on track, the "to spare" gap label.
-- **Marker Amber** (`amber`): 75 to 100% of a limit. Bar fills, the pace stroke when close, the dot beside coverage warnings. Graphic only; never sets text.
+- **Marker Green** (`green`): under 75% of a limit. Bar fills.
+- **Marker Amber** (`amber`): 75 to 100% of a limit. Bar fills, the dot beside coverage warnings. Graphic only; never sets text.
 - **Marker Red** (`red`): over a limit, and needs review. Bar fills, the overspend hatch, the "over" amounts, the needs-review dot and low-confidence values, the top edge of an over-share month cell.
 
 ### Tertiary (marker tints)
@@ -162,12 +162,12 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 - **Pencil Grey** (`muted`): secondary text, ledes, column heads, sub-figures, axis values, fingerprints.
 - **Ruled Line** (`rule`): list and table header rules, the dotted baseline of a bar track.
 - **Hairline** (`hair`): row separators and chart gridlines.
-- **Column Shade** (`column`): alternate month columns in the pace chart and alternate rows of the month grid, the faint banding of a printed planner.
+- **Column Shade** (`column`): alternate month columns in the month bars and alternate rows of the month grid, the faint banding of a printed planner.
 
 ### Named Rules
 **The Red Means Trouble Rule.** Red and its wash are reserved for over-limit and needs-review. Nothing decorative, no headings, no links, no brand accents are red. If a red element on the page does not point at overspending or at a transaction to fix, it is wrong.
 
-**The Three Markers Rule.** State is green under 75%, amber from 75 to 100%, red over 100%, computed by one function and applied identically to bars, pace stroke and month cells. No fourth state colour, and no state colour used for anything but state.
+**The Three Markers Rule.** State is green under 75%, amber from 75 to 100%, red over 100%, computed by one function and applied identically to limit bars, month bars and month cells. No fourth state colour, and no state colour used for anything but state.
 
 **The Amber Never Writes Rule.** Amber is a fill and stroke colour only; it is too light to carry text on paper. Text that must signal state uses ink on a wash, or red/green.
 
@@ -183,7 +183,7 @@ A white sheet with warm-neutral ink and greys, plus three marker colours that on
 - **Display** (`typography.display`): currently unused; reserved for a single headline sentence.
 - **Headline** (`typography.headline`, uppercase): the masthead title.
 - **Title** (`typography.title`, uppercase): section headings, sitting on a 1.5px ink rule.
-- **Figure** (`typography.figure`): headline numbers inside and under the pace chart (spent, budget, over / to spare).
+- **Figure** (`typography.figure`): % of limit in the ranked list.
 - **Label** (`typography.label`, uppercase): month column heads, the TODAY label, chart end labels; axis values use the 500 weight at 0.04em in Pencil Grey.
 - **Lead** (`typography.lead`): currently unused.
 - **Body** (`typography.body`): ledes (Pencil Grey, max 75ch), list rows, summaries. Category names in rows are 600.
@@ -204,7 +204,7 @@ Tables are grids of rules rather than boxes. The ranked list is a six-column gri
 **Responsive (max-width 760px):**
 - Page top padding drops to 20px; sections to 48px apart; the lead to 17px.
 - Ranked rows collapse: name, "… per month" in Pencil Grey and % of limit on the first line, the bar track full-width beneath; spent, limit and the column-head row are hidden.
-- The pace chart keeps its drawing but hides all SVG text; a three-up figure row (Spent, Budget, Over / To spare) below the chart carries the numbers, with the over figure in red.
+- The month bars keep a 720px minimum width and scroll sideways, so amount labels stay legible.
 - The month grid's name column narrows to 136px and wraps; the grid still scrolls sideways.
 - Transaction summaries drop the count to a second line; the fingerprint column is hidden and the table loses its indent.
 
@@ -227,17 +227,20 @@ Sits directly under the masthead, before the first section. Ruled list between h
 ### Section heading
 Condensed caps title with 0.12em tracking on a 1.5px ink rule, followed by a Pencil Grey lede that says how to read the chart below.
 
-### Pace chart (signature)
-Server-rendered SVG, 1000 by 300 user units, full width. Month columns ruled in ink with alternate columns shaded, labelled in caps above the plot; light horizontal gridlines with short axis labels (500k, 1 mio.). The budget accrues as a straight dashed ink line (1.5px, 6/5 dash) ending in an open circle; cumulative spending is a 4px stepped marker stroke in the year's state colour ending in a filled dot. A 2.5px ink "today" edge closes the plot. At the right edge, a bracket and label in red (OVER) or green (TO SPARE) state the gap, with SPENT and BUDGET values beside their line ends. With motion allowed, the stroke draws in over 1.4s (cubic-bezier(.16, 1, .3, 1)) and the dot appears after.
+### Month bars (signature)
+Server-rendered SVG, 1000 by 320 user units, full width. One planner column per window month, ruled in ink with alternate columns shaded and labelled in caps above the plot; light horizontal gridlines with short axis labels (50k, 100k). Each column holds one bar: total budgeted spending that month (non-budgeted categories never count), or one category's spending when drilled down. A 2px ink share line crosses each column at the month's prorated share of the yearly budget (or of the category's own limit) (partial first and last months get a partial share and a "days 15-31" note under the axis). The bar is the state colour up to the share line; spending above it continues as the red hatch, like the limit bars. The amount sits above the bar (or above the share line, whichever is higher) in the condensed face at 15px, red when the month is over its share. The y scale keeps 10% headroom so the tallest amount clears the month labels. An SVG `title` per bar and a `desc` listing every month carry the text equivalent. No load animation.
 
 ### Limit bars (signature)
 Each category measured against its own yearly limit, never against the total or the other categories: share of the total is deliberately not shown. Every track runs from 0 to 200% of that category's limit, so the limit sits at the same place on every row and is drawn as one continuous 2px ink line down the list, labelled LIMIT in the column head. Rows are sorted by % of limit, most over first. A dotted baseline marks the track; the fill is the state colour up to the limit, and spending beyond it continues past the line as the red hatch. Past 200% the hatch is cut off with a notched end. Right-hand columns give % of limit as a headline figure (red when over), the monthly budget (yearly limit / 12), spent, and limit (with left, or over in red). A total row sits on a 1.5px ink rule. A key below spells out every mark.
+
+### Drill-down (no script)
+Each ranked category name (and Total) is a link led by the disclosure chevron; a stretched `::after` makes the whole row the hit target. It points at a `#c-<slug>` panel in Spending per month; CSS `:target` shows that panel and hides the default All categories panel (`.drill:target ~ .drill.all`), so the page opens on the total and the browser's back button and shareable URLs just work. A drilled panel: the category name in condensed caps at 22px, its monthly budget and % of limit in Pencil Grey, a "Back to all categories" link, the category's month bars, then a Transactions heading on a `rule` hairline and its transaction table. The open category's chevron turns down and its name stays underlined in the list. Panels carry a 56px scroll margin so the section heading stays in view. The hatch pattern lives once in a zero-size SVG outside the panels, because patterns inside `display: none` do not paint.
 
 ### Month grid (signature)
 The planner itself: categories down, months across, each cell filled from the bottom with a marker wash against that month's prorated share of the yearly limit (partial first and last months get a partial share). Fill height caps at full; green, amber or red wash by state, and an over-share cell gets a 3px red top edge. The amount sits top-right in small text; empty months stay blank. Alternate rows carry the column shade. A total row closes the grid on a 1.5px ink rule.
 
 ### Disclosure rows
-Native `details`/`summary` rows separated by hairlines: an ink chevron (rotates on open, 0.2s), category name in 600, count in Pencil Grey, amount right-aligned. Hover underlines the name; focus shows a 2px ink outline offset 3px. Inside, a transaction table with Pencil Grey column heads, dates in grey, Danish amounts right-aligned, and select-all fingerprints in mono. The needs-review table adds category and a red low-confidence value.
+Used for Outside the budget. Native `details`/`summary` rows separated by hairlines: an ink chevron (rotates on open, 0.2s), category name in 600, count in Pencil Grey, amount right-aligned. Hover underlines the name; focus shows a 2px ink outline offset 3px. Inside, a transaction table with Pencil Grey column heads, dates in grey, Danish amounts right-aligned, and select-all fingerprints in mono. The needs-review table adds category and a red low-confidence value.
 
 ## Do's and Don'ts
 

@@ -19,7 +19,7 @@ THESIS: The budget year as a kitchen wall year planner. Ruled month columns, a t
 
 OWN-WORLD: Planner paper (white) with black ruled hairlines and a heavier rule at every month. Ink is near-black. Three marker colours map to state: green under 75%, amber 75–100%, red over the limit. Red is reserved for over-limit and needs-review only (raise from gate board). Month and section headings are set in condensed grotesk caps (Barlow Condensed, embedded). Figures are tabular. No cards and no shadows: structure comes from rules and columns, not boxes.
 
-STORY: They see where the money went by category (each against its limit, with its monthly budget) first, then how the year unfolded against the budget, then month-by-month detail. They open a category to check transactions and copy a fingerprint from Needs review.
+STORY: They see where the money went by category (each against its limit, with its monthly budget) first, then one bar per month against its share of the budget so the expensive months stand out (replaced the cumulative pace chart at the user's request, 2026-10-14), then month-by-month detail per category. They click a category in Where the money went to drill down: the month bars switch to that category (default: all categories) with its transactions beneath, replacing the separate Transactions by category section (user request, 2026-10-14). They copy a fingerprint from Needs review.
 
 FIRST VIEWPORT: A masthead line (title, window, last import), the notes list, then "Where the money went". The verdict headline was removed at the user's request (2026-10-13): it was not useful.
 
