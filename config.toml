@@ -54,12 +54,12 @@ yearly_limit = 100000
 [[category]]
 name = "Health"
 description = "Pharmacy, doctor, dentist, health insurance, medicine"
-yearly_limit = 50000
+yearly_limit = 48000
 
 [[category]]
 name = "Children"
 description = "Childcare, toys, children's clothes and activities, savings for children"
-yearly_limit = 50000
+yearly_limit = 48000
 
 [[category]]
 name = "Miscellaneous"

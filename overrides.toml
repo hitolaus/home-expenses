@@ -41,6 +41,9 @@
 "Augment Life" = "Groceries"
 "greenline.dk" = "Housing"
 "hsk.dk" = "Children"
+"CHAO CHAO" = "Children"
+"Netflix.com" = "Subscriptions"
+"Fuglebakken Renser" = "Shopping & clothes"
 
 # Or pin a single transaction by fingerprint (prefix shown in the report, min. 8 chars).
 [transactions]
@@ -55,3 +58,4 @@
 "20fa0c29fb79" = "Vacation"
 "2ea4411c4545" = "Children"
 "daa67a8c74bf" = "Leisure"
+"dc950fe41471" = "Vacation"
